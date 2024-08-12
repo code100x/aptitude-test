@@ -1,0 +1,151 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+}
+
+.header {
+    display: flex;
+    height: 20vh;
+    align-items: center;
+    justify-content: space-between;
+}  
+
+#title {
+    margin: 2vw;
+    margin-left: 4vw;
+    padding: 8px 16px;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+#login {
+    margin: 1vw;
+    margin-right: 4vw;
+    padding: 12px 24px;
+    font-size: 20px;
+    border: solid 1px white;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+#login:hover {
+    box-shadow: 2px 1px 0px 0px white;
+}
+
+.main {
+    height: 80vh;
+}
+
+.main #content {
+    height: 50vh;
+    font-size: 1.5vw;
+    text-align: center;
+    padding: 5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    gap: 5vw;
+    background-image: url('bg.png');
+    background-size: 80vw;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-blend-mode: darken;
+    background-color: rgb(0, 0, 0, 0.7);
+}
+
+#test-details {
+    display: flex;
+    gap: 5vw;
+}
+
+#test-details div {
+    padding: 1vw 2vw;
+    border: solid 1px white;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+.footer {
+    height: 20vh;
+    padding-top: 2rem;
+    border-top: solid 1px white;
+}
+
+#part1 {
+    display: flex;
+    justify-content: center;
+    gap: 10vw;
+}
+
+#download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+}
+
+#download div{
+    height: 3vw;
+    width: 10.25vw;
+    border: solid 0.5px white;
+    border-radius: 2rem;
+}
+
+#social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+}
+
+#social img {
+    height: 3vw;
+    width: 3vw;
+}
+
+#part2 {
+    margin: 2vw;
+    text-align: left;
+    padding: 1vw;
+    font-size: 1vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    #title {
+        font-size: 20px;
+    }
+    
+    #login {
+        font-size: 16px;
+    }
+
+    #download div{
+        height: 6vw;
+        width: 20.5vw;
+    }
+
+    #social img {
+        height: 6vw;
+        width: 6vw;
+    }
+
+    .footer {
+        height: 15vh;
+    }
+
+    .main #content {
+        height: 70vh;
+    }
+
+    .main #content{
+        font-size: 3vw;
+    }
+}
