@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
+import { cn } from "../../../packages/ui/src/lib/utils"
+
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={fontSans.variable}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         {children}
       </body>
     </html>
