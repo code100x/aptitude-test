@@ -1,10 +1,11 @@
+import { Landing } from "../screens/Landing";
 
-export default function Home() {
+export default async function Page() {
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">
-        Hello world!
-      </h1>
+      <main>
+        <Landing/>
+      </main>
     </>
   );
 }

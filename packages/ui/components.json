@@ -12,6 +12,6 @@
   },
   "aliases": {
     "components": "src/shad",
-    "utils": "src/lib/utils"
+    "utils": "@repo/ui/utils"
   }
 }
