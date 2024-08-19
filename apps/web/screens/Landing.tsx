@@ -4,7 +4,7 @@ import Footer from "./Footer";
 export async function Landing() {
 
     return (
-        <div className="flex flex-col h-screen justify-between">
+        <div className="flex flex-col min-h-screen justify-between">
             <div>
                 <AppbarClient />
                 <div>
