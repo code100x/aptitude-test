@@ -4,7 +4,6 @@ import { ModeToggle } from "./ModeToggle";
 import { signIn, signOut } from "next-auth/react";
 
 import { useSession } from "next-auth/react";
-// import UserAccountDropDown from "./UserAccountDropDown";
 import { useRouter } from "next/navigation";
 
 
@@ -34,7 +33,7 @@ export const Appbar = () => {
           )}
 
           <ModeToggle />
-          {/* <UserAccountDropDown /> */}
+
           {user ? (
             <Button
               variant={"outline"}

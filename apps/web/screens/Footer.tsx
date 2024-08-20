@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { SiInstagram, SiYoutube, SiX } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
-import playstore from "../public/playstore.png";
 import Logo from "../public/logo.png";
 
 const Footer = () => {
@@ -43,14 +42,6 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col justify-center">
-          {/* <Link
-            href={"https://play.google.com/store/apps/details?id=com.hundredx.devs"}
-            target="_blank"
-            className="hover:text-blue-500 font-semibold  text-neutral-200 mb-4"
-          >
-            Download App
-            <Image className="shadow-md mt-2" src={playstore} alt={"playstore"} height={50} width={150} />
-          </Link> */}
           <div>
             <h4 className="text-neutral-200 font-semibold mb-2">Follow us</h4>
             <div className="flex gap-x-2">
