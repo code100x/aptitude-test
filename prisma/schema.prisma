@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String        @id @default(uuid())
+  name              String
+  email             String        @unique
+  userImage         String
+  providerAccountId String        @default("")
+  role              Role          @default(User)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  testAttempts      TestAttempt[]
+  provider          Provider
+}
+
+model TestAttempt {
+  id          String     @id @default(uuid())
+  userId      String
+  testDate    DateTime   @default(now())
+  finalPoints Int
+  user        User       @relation(fields: [userId], references: [id])
+  responses   Response[]
+}
+
+model Response {
+  id               String      @id @default(uuid())
+  testAttemptId    String
+  questionId       String
+  selectedOptionId String
+  testAttempt      TestAttempt @relation(fields: [testAttemptId], references: [id])
+  question         Question    @relation(fields: [questionId], references: [id])
+
+  @@unique([testAttemptId, questionId]) // Ensures a unique response per test attempt per question
+}
+
+model Question {
+  id              String     @id @default(uuid())
+  question        String
+  image           String? // Optional field for questions with images
+  video           String?
+  options         Json // Store options directly as a JSON field
+  correctOptionId String
+  category        String
+  difficulty      Difficulty // Enum field for difficulty
+  points          Int
+  explanation     String?
+  tags            Json // Use JSON type to store an array of strings
+  timeLimit       Int?
+  createdBy       String?
+  dateCreated     DateTime   @default(now())
+  lastUpdated     DateTime   @updatedAt
+
+  responses Response[] // Added field for bidirectional relation
+
+  @@index([category])
+  @@index([difficulty])
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+enum Provider {
+  Google
+}
+
+enum Role {
+  Admin
+  User
+}
