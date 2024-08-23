@@ -20,59 +20,68 @@ export const authConfig = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }: any) {
-      if (account.provider === "google") {
-        const { email, name, image } = user;
-
-        if (!email) {
-          return false;
-        }
-
-        const userExists = await db.user.findFirst({
-          where: {
-            email,
-          },
-        });
-
-        if (userExists) {
-          return true;
-        }
-
-        await db.user.create({
-          data: {
-            name,
-            email,
-            userImage: image,
-            provider: "Google",
-            providerAccountId: account.providerAccountId,
-          },
-        });
-
-        return true;
+    session: ({ session, token }: any): session => {
+      const newSession: session = session as session;
+      if (newSession.user && token.uid) {
+        newSession.user.uid = token.uid ?? "";
       }
 
-      return false;
+      return newSession!;
     },
     async jwt({ token, profile, account }: any) {
+      try {
         const userExists = await db.user.findFirst({
           where: {
             providerAccountId: account?.providerAccountId ?? "",
           },
         });
-  
+
         if (userExists) {
           token.uid = userExists.id;
         }
-  
+
         return token;
-      },
-      session: ({ session, token }: any): session => {
-        const newSession: session = session as session;
-        if (newSession.user && token.uid) {
-          newSession.user.uid = token.uid ?? "";
+      } catch (error) {
+        console.error("Error during jwt callback:", error);
+      }
+    },
+    async signIn({ user, account, profile, email, credentials }: any) {
+      try {
+        if (account.provider === "google") {
+          const { email, name, image } = user;
+
+          if (!email) {
+            return false;
+          }
+
+          const userExists = await db.user.findFirst({
+            where: {
+              email,
+            },
+          });
+
+          if (userExists) {
+            return true;
+          }
+
+          await db.user.create({
+            data: {
+              name,
+              email,
+              userImage: image,
+              provider: "Google",
+              providerAccountId: account.providerAccountId,
+            },
+          });
+
+          return true;
         }
-  
-        return newSession!;
-      },
+      } catch (error) {
+        console.error("Error during signIn callback:", error);
+        return false;
+      }
+
+      return false;
+    },
   },
 };
