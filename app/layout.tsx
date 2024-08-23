@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { cn } from "@/lib/utils";
 import { Providers } from "./Provider";
 
-const exo2 = Exo_2({ subsets: ["latin"], variable: "--font-exo2" });
+const exo2 = Exo_2({ subsets: ["latin"], variable: "--font-exo2", display: 'swap', adjustFontFallback: false });
 
 export const metadata: Metadata = {
   title: "100xQuiz",
