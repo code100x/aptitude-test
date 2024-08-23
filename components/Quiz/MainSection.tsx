@@ -26,8 +26,6 @@ const MainSection = ({setResult}: {setResult: (val:any) => void;}) => {
   const [testId, setTestId] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
 
-  console.log("questions", questions);
-
   const getQuestions = async () => {
     try {
       const res = await axios.get("/api/questions");
@@ -53,7 +51,6 @@ const MainSection = ({setResult}: {setResult: (val:any) => void;}) => {
         const res = await axios.post("/api/quiz", {
           testAttemptId: testId,
         });
-        console.log("res", res);
         setResult(res.data);
         toast("Quiz submitted", {
           style: { background: "#b9fbc0" },
