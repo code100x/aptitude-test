@@ -6,7 +6,7 @@ import Unauthenticated from "@/components/Unauthenticated";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export default function () {
+export default function QuizComponent () {
   const { data: session, status } = useSession();
   const [startQuiz, setStartQuiz] = useState<boolean>(false);
 

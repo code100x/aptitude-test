@@ -1,6 +1,6 @@
 import { Option } from "./MainSection";
 
-export default function ({
+export default function OptionComponent ({
   option,
   selectedOption,
   handleSelectOption,
