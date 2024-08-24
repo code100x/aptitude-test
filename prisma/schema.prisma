@@ -37,27 +37,27 @@ model Response {
   testAttempt      TestAttempt @relation(fields: [testAttemptId], references: [id])
   question         Question    @relation(fields: [questionId], references: [id])
 
-  @@unique([testAttemptId, questionId]) // Ensures a unique response per test attempt per question
+  @@unique([testAttemptId, questionId])
 }
 
 model Question {
   id              String     @id @default(uuid())
   question        String
-  image           String? // Optional field for questions with images
+  image           String?
   video           String?
-  options         Json // Store options directly as a JSON field
+  options         Json
   correctOptionId String
   category        String
-  difficulty      Difficulty // Enum field for difficulty
+  difficulty      Difficulty
   points          Int
   explanation     String?
-  tags            Json // Use JSON type to store an array of strings
+  tags            Json
   timeLimit       Int?
   createdBy       String?
   dateCreated     DateTime   @default(now())
   lastUpdated     DateTime   @updatedAt
 
-  responses Response[] // Added field for bidirectional relation
+  responses Response[]
 
   @@index([category])
   @@index([difficulty])

@@ -2,6 +2,7 @@ import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/app/db";
+import { Option } from "@/components/Quiz/MainSection";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authConfig);
@@ -9,6 +10,21 @@ export async function POST(req: NextRequest) {
   if (!session?.user) {
     return NextResponse.json(
       { message: "You're not logged in" },
+      { status: 401 }
+    );
+  }
+
+  const user = await db.user.findFirst({
+    where: {
+      email: session.user.email,
+    },
+  });
+
+  if (!user || session?.user?.email !== user.email) {
+    return NextResponse.json(
+      {
+        message: "Unauthorized",
+      },
       { status: 401 }
     );
   }
@@ -26,11 +42,30 @@ export async function POST(req: NextRequest) {
     let totalPoints = 0;
     let earnedPoints = 0;
 
+    const resultSummary: any = [];
+
     responses.forEach((response) => {
       totalPoints += response.question.points;
       if (response.selectedOptionId === response.question.correctOptionId) {
         earnedPoints += response.question.points;
       }
+
+      const options = response.question.options as Option[];
+
+      const selectedOptionText = options.find((option: Option) => option.optionId === response.selectedOptionId)?.text;
+      const correctOptionText = options.find((option: Option) => option.optionId === response.selectedOptionId)?.text;
+
+      resultSummary.push({
+        questionId: response.questionId,
+        question: response.question.question,
+        selectedOptionId: response.selectedOptionId,
+        selectedOptionText,
+        correctOptionId: response.question.correctOptionId,
+        correctOptionText,
+        explanation: response.question.explanation,
+        tags: response.question.tags,
+        category: response.question.category
+      })
     });
 
     const percentageScore = (earnedPoints / totalPoints) * 100;
@@ -45,6 +80,7 @@ export async function POST(req: NextRequest) {
         message: "Quiz submitted successfully",
         finalPoints: earnedPoints,
         percentage: percentageScore,
+        resultSummary
       },
       { status: 200 }
     );

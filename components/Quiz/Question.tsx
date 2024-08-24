@@ -26,7 +26,6 @@ const Question = ({
         questionId: data.id,
         selectedOptionId: option,
       });
-      console.log("res", res);
       setSelectedOption(option);
       toast("Response saved", {
         style: { background: "#b9fbc0" },
