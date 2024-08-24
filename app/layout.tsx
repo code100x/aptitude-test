@@ -5,7 +5,12 @@ import Navbar from "../components/Navbar";
 import { cn } from "@/lib/utils";
 import { Providers } from "./Provider";
 
-const exo2 = Exo_2({ subsets: ["latin"], variable: "--font-exo2", display: 'swap', adjustFontFallback: false });
+const exo2 = Exo_2({
+  subsets: ["latin"],
+  variable: "--font-exo2",
+  display: "swap",
+  adjustFontFallback: false,
+});
 
 export const metadata: Metadata = {
   title: "100xQuiz",
@@ -19,15 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          "min-h-screen font-exo2 antialiased bg-[#bdb2ff] text-[#0d3b66] md:px-20 px-4",
-          exo2.variable
-        )}
-      >
+      <body className={cn("min-h-screen font-exo2 antialiased", exo2.variable)}>
         <Providers>
-          <Navbar />
-          {children}
+          <div className="md:px-20 px-4">
+            <Navbar />
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

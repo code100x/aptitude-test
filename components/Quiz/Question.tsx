@@ -28,7 +28,7 @@ const Question = ({
       });
       setSelectedOption(option);
       toast("Response saved", {
-        style: { background: "#b9fbc0" },
+        style: { background: "#86efac", color: "black" },
       });
     } catch (error) {
       console.log("error", error);
@@ -40,10 +40,10 @@ const Question = ({
 
   return (
     <div className="flex flex-col flex-grow mb-10">
-      <div className="px-4 py-2 text-xl font-bold bg-[#0081a7] rounded-t-xl text-white">
+      <div className="px-4 py-2 text-xl font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-black rounded-t-xl">
         Question {qNo}
       </div>
-      <div className="p-4 font-medium bg-[#f8edeb] rounded-b-xl">
+      <div className="p-4 font-medium rounded-b-xl dark:bg-slate-700 bg-slate-300">
         <div className="font-semibold text-2xl h-[10vh]">{data.question}</div>
         <div className="grid grid-cols-2 gap-10 mt-10">
           {data.options.map((option) => (
@@ -57,8 +57,8 @@ const Question = ({
         </div>
       </div>
       {/* <div className="flex justify-around mt-6">
-        <Button variant="navigation">Back</Button>
-        <Button variant="navigation">Next</Button>
+        <Button variant="secondary">Back</Button>
+        <Button variant="secondary">Next</Button>
       </div> */}
     </div>
   );

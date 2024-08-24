@@ -14,7 +14,7 @@ export default function QuizComponent () {
     return <Unauthenticated />;
   }
   return (
-    <div className="min-w-full flex flex-col justify-center items-center">
+    <div className="min-w-full flex-grow flex flex-col justify-center items-center">
       {startQuiz ? <Quiz /> : <QuizInstructions setStartQuiz={setStartQuiz} />}
     </div>
   );

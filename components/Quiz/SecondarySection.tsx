@@ -23,12 +23,12 @@ const SecondarySection = () => {
   };
 
   return (
-    <div className="flex flex-col pl-10">
-      <div className="flex flex-col mt-6">
-        <div className="px-4 py-2 text-xl font-bold bg-[#0081a7] rounded-t-xl text-white">
+    <div className="flex flex-col ml-10 p-6 rounded-2xl bg-slate-100 dark:bg-slate-900">
+      <div className="flex flex-col">
+        <div className="px-4 py-2 text-xl font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-black rounded-t-xl">
           Time
         </div>
-        <div className="p-4 text-3xl font-bold bg-[#f8edeb] rounded-b-xl text-center">
+        <div className="p-4 text-3xl font-bold dark:bg-slate-800 bg-slate-200 rounded-b-xl text-center">
           {formatTime(timeLeft)}
         </div>
       </div>

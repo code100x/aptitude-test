@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       const options = response.question.options as Option[];
 
       const selectedOptionText = options.find((option: Option) => option.optionId === response.selectedOptionId)?.text;
-      const correctOptionText = options.find((option: Option) => option.optionId === response.selectedOptionId)?.text;
+      const correctOptionText = options.find((option: Option) => option.optionId === response.question.correctOptionId)?.text;
 
       resultSummary.push({
         questionId: response.questionId,

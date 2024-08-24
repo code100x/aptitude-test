@@ -5,11 +5,11 @@ import { Checkbox } from "../ui/checkbox";
 const QuizInstructions = ({setStartQuiz}: {setStartQuiz: (val: boolean) => void;}) => {
   const [readInstructions, setReacInstructions] = useState<boolean>(false);
   return (
-    <div className="w-3/5 flex flex-col rounded-xl">
-      <div className="px-4 py-2 text-xl font-bold bg-[#0081a7] rounded-t-xl text-white">
-        Instuctions
+    <div className="w-3/5 flex flex-col rounded-xl mt-28">
+      <div className="px-4 py-2 text-xl font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-black rounded-t-xl">
+        Instructions
       </div>
-      <div className="p-4 font-medium bg-[#f8edeb]">
+      <div className="p-4 font-medium dark:bg-slate-800 bg-slate-200">
         <ul className="p-4">
           <li className="list-disc">
             You have a total of 2 hours to complete the quiz. Ensure you manage
@@ -36,7 +36,7 @@ const QuizInstructions = ({setStartQuiz}: {setStartQuiz: (val: boolean) => void;
           </li>
         </ul>
       </div>
-      <div className="flex flex-col justify-center items-center py-6 bg-[#f8edeb] rounded-b-xl">
+      <div className="flex flex-col justify-center items-center py-6 dark:bg-slate-800 bg-slate-200 rounded-b-xl">
         <div className="flex items-center mb-2">
           <Checkbox
             className="mr-2"
@@ -46,7 +46,7 @@ const QuizInstructions = ({setStartQuiz}: {setStartQuiz: (val: boolean) => void;
             I have read the instructions and ready to proceed.
           </p>
         </div>
-        <Button variant={"secondary"} disabled={!readInstructions} onClick={() => setStartQuiz(true)}>
+        <Button disabled={!readInstructions} onClick={() => setStartQuiz(true)}>
           Proceed
         </Button>
       </div>
