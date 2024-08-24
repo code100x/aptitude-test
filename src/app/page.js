@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, FileText, Lightbulb } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
+import { useRouter } from "next/navigation";
+
 export default function Home() {
   const { user, isLoading } = useUser();
+  const router = useRouter();
 
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -36,8 +39,8 @@ export default function Home() {
 
   const handleTakeTest = () => {
     if (user) {
-      toast.success("Starting the test. Good luck!");
-      // Implement test start logic here
+      toast.success("Fill  the test Details. Good luck!");
+      router.push("/test-type");
     } else {
       toast.error("Please log in to take the test.");
     }
