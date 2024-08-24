@@ -18,7 +18,6 @@ const SignIn = () => {
           type="submit"
           className="text-md mt-10 flex w-full items-center justify-center gap-2 rounded border px-4 py-3 font-light text-lime-50 hover:opacity-85 focus:outline-none focus:ring-2"
           onClick={async () => {
-            // handleClick();
             await signIn("google", { callbackUrl: "/" });
           }}
         >
@@ -36,7 +35,6 @@ const SignIn = () => {
           type="submit"
           className="text-md flex w-full items-center justify-center gap-2 rounded border bg-slate-100 px-4 py-3 font-normal text-neutral-700 hover:opacity-85 focus:outline-none focus:ring-2"
           onClick={async () => {
-            // handleClick();
             await signIn("github", { callbackUrl: "/" });
           }}
         >

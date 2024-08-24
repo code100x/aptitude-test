@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "100x Coders Quest",
+  title: "100xQuest",
   description: "Aptitude test to select 30individuals to be mentored by Harkirat",
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}>
         {/* <ThemeProvider
           attribute="class"
           defaultTheme="light"

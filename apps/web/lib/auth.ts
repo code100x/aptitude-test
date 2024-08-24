@@ -1,9 +1,7 @@
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@repo/db/client";
-import type { Adapter } from "next-auth/adapters";
-import { SessionStrategy } from "next-auth";
+import { createUser } from "../utils";
 
 export const authOptions = {
   // adapter: PrismaAdapter(db) as Adapter,
@@ -23,24 +21,24 @@ export const authOptions = {
   pages: {
     signIn: "/signin",
   },
-  session: { strategy: "jwt" as SessionStrategy },
   callbacks: {
     async jwt({ token }: any) {
       return token;
     },
     async session({ session, token }: any) {
-      // const user = await db.user.findUnique({
-      //   where: {
-      //     id: token.sub,
-      //   },
-      // });
-      // console.log({ user });
+      const user = await db.user.findFirst({
+        where: { email: session.user.email },
+      });
 
-      // if (token) {
-      //   session.accessToken = token.accessToken;
-      //   session.user.id = token.sub;
-      //   session.user.admin = user?.admin;
-      // }
+      if (!user?.email?.length) {
+        await createUser(session?.user);
+      }
+
+      if (token) {
+        session.accessToken = token.accessToken;
+        session.user.id = token.sub;
+        session.user.admin = user?.admin;
+      }
       if (session && session.user) {
         session.user.id = token.sub;
       }

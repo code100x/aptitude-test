@@ -14,30 +14,41 @@ datasource db {
 }
 
 model User {
-  id                      Int       @id @default(autoincrement())
-  email                   String    @unique
-  name                    String?     
-  admin                   Boolean   @default(false)
-  subscribed              Boolean?  @default(false)
-  attemptTimestamp        String?     
-  disconnectionTimestamp  String?     
-  testSubmitted           Boolean?  @default(false)
+  id         String      @id @default(uuid())
+  email      String      @unique
+  name       String?
+  avatar     String?
+  admin      Boolean     @default(false)
+  subscribed Boolean?    @default(false)
+  testStatus TestStatus?
+  createAt   DateTime    @default(now())
+  updatedAt  DateTime    @default(now())
 }
 
 model Question {
-  id              String     @id @default(uuid())
+  id              String   @id @default(cuid())
   question        String
-  options         Option[]   // One-to-Many relationship with `Option`
+  image           String?
+  video           String?
+  options         Option[] // One-to-Many relationship with `Option`
   correctOptionId String
-  explanation     String?    
+  explanation     String?
   createdBy       String?
-  dateCreated     DateTime   @default(now())
-  lastUpdated     DateTime   @updatedAt
+  createAt        DateTime @default(now())
+  updatedAt       DateTime @default(now())
 }
 
-model Option {  // Note the singular name `Option`
+model Option {
   id         Int      @id @default(autoincrement())
   title      String
   question   Question @relation(fields: [questionId], references: [id]) // Foreign key relationship
-  questionId String   // Foreign key to `Question`
+  questionId String // Foreign key to `Question`
+  createAt   DateTime @default(now())
+  updatedAt  DateTime @default(now())
+}
+
+enum TestStatus {
+  Interrupted
+  NotStarted
+  Submitted
 }
