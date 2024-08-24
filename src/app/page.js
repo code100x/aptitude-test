@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, FileText, Lightbulb } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const { user, isLoading } = useUser();
@@ -33,8 +34,18 @@ export default function Home() {
     },
   ];
 
+  const handleTakeTest = () => {
+    if (user) {
+      toast.success("Starting the test. Good luck!");
+      // Implement test start logic here
+    } else {
+      toast.error("Please log in to take the test.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <Toaster position="top-center" reverseOrder={false} />
       <header className="bg-white shadow-sm">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
           <motion.h1
@@ -92,7 +103,7 @@ export default function Home() {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               className="bg-[#FF5A5F] hover:bg-[#FF385C] text-white text-lg rounded-full px-12 py-4 transition-all duration-300 ease-in-out transform hover:shadow-lg"
-              onClick={() => alert("Test functionality to be implemented")}
+              onClick={handleTakeTest}
             >
               Take Test
             </Button>
