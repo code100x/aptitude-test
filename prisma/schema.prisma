@@ -1,0 +1,155 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  username           String?             @unique
+  email              String?             @unique
+  emailVerified      Boolean             @default(false)
+  hashedPassword     String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  imageUrl           String?
+  displayName        String?
+  role               Role                @default(USER)
+  oauthAccounts      OAuthAccount[]
+  sessions           Session[]
+  verificationEmails VerificationEmail[]
+  passwordReset      PasswordResetToken?
+  examSubmissions    ExamSubmission[]
+  ExamProgress       ExamProgress[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProviderType {
+  GOOGLE
+  DISCORD
+  GITHUB
+}
+
+model OAuthAccount {
+  id             String       @id @default(cuid())
+  userId         String
+  provider       ProviderType
+  providerUserId String
+  accessToken    String
+  refreshToken   String?
+  expiresAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([provider, providerUserId])
+  @@map("oauth_accounts")
+}
+
+model VerificationEmail {
+  id        String   @id @default(cuid())
+  userId    String
+  code      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("verification_emails")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Exam {
+  id           String           @id @default(cuid())
+  title        String
+  description  String
+  price        Int
+  duration     Int
+  questions    Question[]
+  submissions  ExamSubmission[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  ExamProgress ExamProgress[]
+
+  @@map("exams")
+}
+
+model Question {
+  id            String   @id @default(cuid())
+  examId        String
+  exam          Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  text          String
+  options       String[]
+  correctAnswer Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([examId])
+  @@map("questions")
+}
+
+model ExamSubmission {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examId           String
+  exam             Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  answers          Json
+  score            Int
+  timeSpent        Int
+  warningCount     Int      @default(0)
+  correctAnswers   Int[]
+  incorrectAnswers Int[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId, examId])
+  @@map("exam_submissions")
+}
+
+model ExamProgress {
+  id              String   @id @default(cuid())
+  examId          String
+  userId          String
+  answers         Json
+  markedQuestions Json
+  timeRemaining   Int
+  warningCount    Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  exam Exam @relation(fields: [examId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([examId, userId])
+}
