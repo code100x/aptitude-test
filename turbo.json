@@ -1,0 +1,36 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalEnv": [
+    "MY_SECRET_TOKEN",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GITHUB_ID",
+    "GITHUB_SECRET",
+    "GOOGLEAI_API_KEY",
+    "GOOGLEAI_URL",
+    "NEXTAUTH_SECRET",
+    "CACHE_EXPIRE"
+  ],
+  "globalDependencies": [
+    "**/.env.*local",
+    "**/.env",
+    ".env",
+    ".env.local",
+    "tsconfig.json"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

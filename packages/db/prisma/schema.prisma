@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                      Int       @id @default(autoincrement())
+  email                   String    @unique
+  name                    String?     
+  admin                   Boolean   @default(false)
+  subscribed              Boolean?  @default(false)
+  attemptTimestamp        String?     
+  disconnectionTimestamp  String?     
+  testSubmitted           Boolean?  @default(false)
+}
+
+model Question {
+  id              String     @id @default(uuid())
+  question        String
+  options         Option[]   // One-to-Many relationship with `Option`
+  correctOptionId String
+  explanation     String?    
+  createdBy       String?
+  dateCreated     DateTime   @default(now())
+  lastUpdated     DateTime   @updatedAt
+}
+
+model Option {  // Note the singular name `Option`
+  id         Int      @id @default(autoincrement())
+  title      String
+  question   Question @relation(fields: [questionId], references: [id]) // Foreign key relationship
+  questionId String   // Foreign key to `Question`
+}
