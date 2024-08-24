@@ -11,7 +11,8 @@
     "pretty": "npx prettier --write .",
     "db:seed": "npx tsc prisma/seed.ts && node prisma/seed.js",
     "prisma:migrate": "npx prisma migrate deploy",
-    "postbuild": "next-sitemap --config next-sitemap.config.js"
+    "postbuild": "next-sitemap --config next-sitemap.config.js",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
