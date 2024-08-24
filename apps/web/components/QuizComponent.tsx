@@ -23,8 +23,6 @@ const QuizComponent = () => {
     swal("Times Up!!", "Thank You for your response", "success");
   };
 
-  console.log({ questions });
-
   useEffect(() => {
     if (previousQuestionId !== null) {
       setQuestions((prevQuestions) =>
