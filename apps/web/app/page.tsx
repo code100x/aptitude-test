@@ -8,7 +8,6 @@ const getUserDetails = async () => await getServerSession(authOptions);
 
 const Home = async () => {
   const session = await getUserDetails();
-  console.log({ session });
 
   if (!session || !session?.user) {
     redirect("/auth");

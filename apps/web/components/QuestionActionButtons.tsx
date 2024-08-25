@@ -1,7 +1,8 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
-import swal from "sweetalert";
+import { toast } from "sonner";
+
 import { QuestionStatus, QuizQuestion } from "@repo/common/config";
 import { currentQuestionId as recoilCurrentQuestionId, questionsData } from "@repo/store";
 
@@ -25,7 +26,9 @@ const QuestionActionButtons = () => {
       const nextIndex = Math.min(currentIndex + 1, questions.length - 1);
       setCurrentQuestionId(questions[nextIndex]!.id);
     } else {
-      swal("No Ser!!", "Please select an option to save and go to the next question");
+      toast("No Ser!!", {
+        description: "Please select an option to save and go to the next question",
+      });
     }
   };
 
@@ -34,7 +37,6 @@ const QuestionActionButtons = () => {
     const status = currentQuestion?.selectedOptionId
       ? QuestionStatus.ReviewWithAnswer
       : QuestionStatus.ReviewWithoutAnswer;
-    console.log({ status });
 
     currentQuestionId && updateQuestionStatus(currentQuestionId, status);
 

@@ -1,25 +1,61 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import swal from "sweetalert";
+import React, { useEffect, useState } from "react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Instructions = () => {
   const router = useRouter();
   const [isTermsChecked, setIsTermsChecked] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [isInspectDetected, setIsInspectDetected] = useState(false);
+
+  const toggleAlert = () => {
+    setIsAlertVisible(!isAlertVisible);
+  };
 
   const handleChange = () => {
     setIsTermsChecked(!isTermsChecked);
   };
+
+  const detectConsoleOpen = () => {
+    const threshold = 160;
+    const isConsoleOpen =
+      window.outerHeight - window.innerHeight > threshold ||
+      window.outerWidth - window.innerWidth > threshold;
+
+    if (isConsoleOpen) {
+      setIsInspectDetected(true);
+      setIsAlertVisible(true);
+    }
+    return isConsoleOpen;
+  };
+
   const handleStartClick = () => {
     if (isTermsChecked) {
-      // TODO: Check if already submitted the test
-      // navigate to the test
-      router.push("/test");
+      if (detectConsoleOpen()) {
+        setIsInspectDetected(true);
+      } else {
+        // TODO: Check if already submitted the test
+        router.push("/test");
+      }
     } else {
-      swal("Warning!", "Please accept terms and conditions before proceeding.", "warning");
+      toggleAlert();
     }
   };
+
+  useEffect(() => {
+    detectConsoleOpen();
+  }, []);
 
   return (
     <main className="flex flex-col p-4">
@@ -126,6 +162,23 @@ const Instructions = () => {
           </button>
         </div>
       </div>
+      <AlertDialog open={isAlertVisible}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {isInspectDetected ? "Alert" : "Hold on your horses!!"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {isInspectDetected
+                ? "Inspecting is not allowed! Please close the inspect window in order to proceed"
+                : "Please accept terms and conditions before proceeding."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={toggleAlert}>OK</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </main>
   );
 };

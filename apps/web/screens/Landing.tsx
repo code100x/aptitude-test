@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
+import Footer from "@/components/Footer";
 
 import styles from "./Landing.module.css";
 
@@ -43,6 +44,7 @@ const Landing = () => {
       >
         Get Started
       </button>
+      <Footer />
     </div>
   );
 };

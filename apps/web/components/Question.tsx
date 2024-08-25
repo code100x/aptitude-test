@@ -15,14 +15,14 @@ const Question = () => {
     );
   };
   return (
-    <div className="h-[50vh] overflow-auto">
+    <div className="h-[50vh] overflow-auto text-slate-200">
       <div className="flex gap-2">
         <p className="mb-4 mt-10 text-3xl font-semibold">
           {`${questions.findIndex((q) => q.id === currentQuestionId) + 1}.`}
         </p>
         <p className="mb-4 mt-10 text-3xl font-semibold">{currentQuestion?.question}</p>
       </div>
-      <div className="ml-12 mt-5 flex flex-col space-y-4">
+      <div className="ml-12 mt-5 flex flex-col space-y-4 text-slate-300">
         {currentQuestion?.options.map((option) => (
           <label key={option.id} className="flex cursor-pointer items-center space-x-2 self-start">
             <input
