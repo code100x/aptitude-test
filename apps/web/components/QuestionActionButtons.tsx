@@ -88,7 +88,7 @@ const QuestionActionButtons = () => {
   };
 
   return (
-    <>
+    <div className="ml-10">
       <div className="mt-6 flex gap-2">
         <button
           className="rounded-lg bg-green-500 px-4 py-2 text-white"
@@ -120,7 +120,7 @@ const QuestionActionButtons = () => {
           Submit
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

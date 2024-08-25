@@ -52,11 +52,11 @@ const QuizComponent = () => {
       initial={{ opacity: 0, y: 20 }}
     >
       <div className="flex p-4">
-        <div className="w-2/3 p-4">
+        <div className="w-[60vw] p-4">
           <Question />
           <QuestionActionButtons />
         </div>
-        <div className="w-1/3">
+        <div className="w-[30vw]">
           <Timer onComplete={handleTimerComplete} duration={60 * 60 * 2} />
           <QuestionSummary />
           <QuestionsPalette />
