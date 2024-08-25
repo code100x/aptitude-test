@@ -179,6 +179,14 @@ export default function ExamComponent({
     setShowFullscreenWarning(false)
   }, [])
 
+  const handleNextQuestion = useCallback(() => {
+    if (currentQuestion === questions.length - 1) {
+      setShowExitDialog(true)
+    } else {
+      setCurrentQuestion((prev) => Math.min(questions.length - 1, prev + 1))
+    }
+  }, [currentQuestion, questions.length])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -203,7 +211,7 @@ export default function ExamComponent({
               {questions[currentQuestion].text}
             </motion.p>
             <RadioGroup
-              value={answers[questions[currentQuestion].id]?.toString()}
+              value={answers[questions[currentQuestion].id]?.toString() || ''}
               onValueChange={(value) => handleAnswer(parseInt(value))}
             >
               <AnimatePresence>
@@ -254,15 +262,12 @@ export default function ExamComponent({
                 : 'Mark for Review'}
             </Button>
             <Button
-              onClick={() =>
-                setCurrentQuestion((prev) =>
-                  Math.min(questions.length - 1, prev + 1)
-                )
-              }
-              disabled={currentQuestion === questions.length - 1}
+              onClick={handleNextQuestion}
               className='bg-blue-500 hover:bg-blue-600 text-white'
             >
-              Next
+              {currentQuestion === questions.length - 1
+                ? 'Submit Test'
+                : 'Next'}
             </Button>
           </CardFooter>
         </Card>
