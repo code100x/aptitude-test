@@ -1,14 +1,21 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 import QuizComponent from "../../components/QuizComponent";
-import useFullScreen from "../../hooks/useFullScreen";
-import { useRouter } from "next/navigation";
 
 const Quiz = () => {
-  const router = useRouter();
-
-  useFullScreen();
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   // TODO: Prevent going back
 
@@ -37,7 +44,6 @@ const Quiz = () => {
         event.metaKey ||
         event.altKey
       ) {
-        console.log("Blocked dev tools shortcut:", { key, code });
         event.preventDefault();
         event.stopPropagation();
       }
@@ -48,31 +54,62 @@ const Quiz = () => {
     };
   }, []);
 
-  // TODO: Make the API call to register timestamp only if this useEffect does nothing
-  // redirects user to the instructions page if the inspect window is open
+  const enterFullScreen = () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) {
+      el.requestFullscreen().catch((err) => {
+        console.error("Error attempting to enter fullscreen mode:", err);
+      });
+    }
+  };
+
+  const exitFullScreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch((err) => {
+        console.error("Error attempting to exit fullscreen mode:", err);
+      });
+    }
+  };
+
+  const handleFullscreenChange = () => {
+    if (!document.fullscreenElement) {
+      setIsAlertVisible(true);
+    }
+  };
+
+  const handleAlertClick = () => {
+    enterFullScreen();
+    setIsAlertVisible(false);
+  };
+
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    const detectConsoleOpen = () => {
-      const threshold = 160;
-      const isConsoleOpen =
-        window.outerHeight - window.innerHeight > threshold ||
-        window.outerWidth - window.innerWidth > threshold;
+    enterFullScreen();
 
-      if (isConsoleOpen) {
-        swal("Warning!", "Inspecting is not allowed!", "warning");
-        timeout = setTimeout(() => {
-          router.back(); // This will navigate one step back
-        }, 1000);
-      }
-    };
-    detectConsoleOpen();
-
+    window.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => {
-      clearInterval(timeout);
+      exitFullScreen();
+      window.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
 
-  return <QuizComponent />;
+  return (
+    <>
+      <QuizComponent />
+      <AlertDialog open={isAlertVisible}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Warning!</AlertDialogTitle>
+            <AlertDialogDescription>
+              You must stay in full screen mode to continue.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={handleAlertClick}>OK</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
 };
 
 export default Quiz;

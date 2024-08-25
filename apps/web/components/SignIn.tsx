@@ -8,7 +8,9 @@ import styles from "./SignIn.module.css";
 
 const SignIn = () => {
   return (
-    <div className={`flex h-screen items-center justify-center bg-[#070e22] ${styles.bgImage}`}>
+    <div
+      className={`flex h-screen w-screen items-center justify-center bg-[#070e22] ${styles.bgImage}`}
+    >
       <div className="relative mx-auto box-border w-[70%] rounded-xl border-[0.5px] border-slate-400 p-6 md:w-[70%] lg:w-[30%]">
         <div className="text-center text-4xl font-light text-neutral-100">Welcome</div>
         <div className="my-3 text-center text-xl font-light text-neutral-100">

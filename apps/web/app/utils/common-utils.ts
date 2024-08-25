@@ -21,7 +21,7 @@ export const getQuestionColorAndText = (status: QuestionStatus | string) => {
       label = "Marked for Review";
       break;
     default:
-      color = "bg-gray-400";
+      color = "bg-slate-700";
       label = "Not Visited";
       break;
   }

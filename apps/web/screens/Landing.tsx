@@ -2,10 +2,12 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+
+import { cn } from "@/lib/utils";
+import Footer from "@/components/Footer";
 
 import styles from "./Landing.module.css";
-import { signOut, useSession } from "next-auth/react";
-import { cn } from "../lib/utils";
 
 const Landing = () => {
   const router = useRouter();
@@ -13,13 +15,13 @@ const Landing = () => {
   const user = session.data?.user;
 
   const handleClick = () => {
-    router.push(user?.email?.length ? "/instructions" : "/auth");
+    router.push("/instructions");
   };
 
   return (
     <div
       className={cn(
-        `flex h-screen flex-col items-center justify-center bg-[#070e22] ${styles.bgImage}`,
+        `flex h-screen w-screen flex-col items-center justify-center bg-[#070e22] ${styles.bgImage}`,
       )}
     >
       {!!user?.email && (
@@ -42,6 +44,7 @@ const Landing = () => {
       >
         Get Started
       </button>
+      <Footer />
     </div>
   );
 };

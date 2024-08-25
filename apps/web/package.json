@@ -3,18 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "next build",
     "dev": "next dev --turbo",
-    "build": "npx prisma generate && next build",
-    "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "start": "next start"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.2",
     "@prisma/client": "^5.18.0",
+    "@radix-ui/react-alert-dialog": "^1.1.1",
+    "@radix-ui/react-avatar": "^1.1.0",
+    "@radix-ui/react-checkbox": "^1.1.1",
+    "@radix-ui/react-radio-group": "^1.2.0",
+    "@radix-ui/react-scroll-area": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
     "@repo/common": "*",
     "@repo/db": "*",
     "@repo/ui": "*",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.3.30",
+    "lucide-react": "^0.435.0",
     "next": "14.2.6",
     "next-auth": "^4.24.7",
     "next-themes": "^0.3.0",
@@ -22,8 +32,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recoil": "^0.7.7",
-    "sweetalert": "^2.1.2",
-    "tailwind-merge": "^2.5.2"
+    "sonner": "^1.5.0",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",

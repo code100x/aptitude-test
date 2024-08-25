@@ -15,11 +15,14 @@ const Question = () => {
     );
   };
   return (
-    <>
-      <p className="mb-4 mt-10 text-4xl font-semibold">
-        {`${questions.findIndex((q) => q.id === currentQuestionId) + 1}. ${currentQuestion?.question}`}
-      </p>
-      <div className="ml-6 flex flex-col space-y-4">
+    <div className="h-[50vh] overflow-auto text-slate-200">
+      <div className="flex gap-2">
+        <p className="mb-4 mt-10 text-3xl font-semibold">
+          {`${questions.findIndex((q) => q.id === currentQuestionId) + 1}.`}
+        </p>
+        <p className="mb-4 mt-10 text-3xl font-semibold">{currentQuestion?.question}</p>
+      </div>
+      <div className="ml-12 mt-5 flex flex-col space-y-4 text-slate-300">
         {currentQuestion?.options.map((option) => (
           <label key={option.id} className="flex cursor-pointer items-center space-x-2 self-start">
             <input
@@ -30,11 +33,11 @@ const Question = () => {
               type="radio"
               value={option.id}
             />
-            <span className="text-xl">{option.text}</span>
+            <span className="text-2xl">{option.text}</span>
           </label>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

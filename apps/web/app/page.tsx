@@ -1,22 +1,13 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "../lib/auth";
-import Landing from "../screens/Landing";
+import { authOptions } from "@/lib/auth";
+import Landing from "@/screens/Landing";
 
-const getUserDetails = async () => {
-  // console.log('get user details start');
-  // const date = new Date();
-  const session = await getServerSession(authOptions);
-  // console.log(
-  //   `get user details end ${  (new Date().getTime() - date.getTime()) / 1000}`,
-  // );
-  return session;
-};
+const getUserDetails = async () => await getServerSession(authOptions);
 
-export default async function Home() {
+const Home = async () => {
   const session = await getUserDetails();
-  console.log({ session });
 
   if (!session || !session?.user) {
     redirect("/auth");
@@ -27,4 +18,6 @@ export default async function Home() {
       <Landing />
     </main>
   );
-}
+};
+
+export default Home;

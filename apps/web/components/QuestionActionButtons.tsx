@@ -1,7 +1,8 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
-import swal from "sweetalert";
+import { toast } from "sonner";
+
 import { QuestionStatus, QuizQuestion } from "@repo/common/config";
 import { currentQuestionId as recoilCurrentQuestionId, questionsData } from "@repo/store";
 
@@ -25,7 +26,9 @@ const QuestionActionButtons = () => {
       const nextIndex = Math.min(currentIndex + 1, questions.length - 1);
       setCurrentQuestionId(questions[nextIndex]!.id);
     } else {
-      swal("No Ser!!", "Please select an option to save and go to the next question");
+      toast("No Ser!!", {
+        description: "Please select an option to save and go to the next question",
+      });
     }
   };
 
@@ -34,7 +37,6 @@ const QuestionActionButtons = () => {
     const status = currentQuestion?.selectedOptionId
       ? QuestionStatus.ReviewWithAnswer
       : QuestionStatus.ReviewWithoutAnswer;
-    console.log({ status });
 
     currentQuestionId && updateQuestionStatus(currentQuestionId, status);
 
@@ -84,11 +86,11 @@ const QuestionActionButtons = () => {
   };
 
   const handleSubmitClick = () => {
-    router.push("/submit-confirmation");
+    router.replace("/submit-confirmation");
   };
 
   return (
-    <>
+    <div className="ml-10">
       <div className="mt-6 flex gap-2">
         <button
           className="rounded-lg bg-green-500 px-4 py-2 text-white"
@@ -96,13 +98,13 @@ const QuestionActionButtons = () => {
         >
           Save & Next
         </button>
-        <button className="rounded-lg bg-slate-200 px-4 py-2" onClick={handlePrevClick}>
+        <button className="rounded-lg bg-slate-800 px-4 py-2" onClick={handlePrevClick}>
           Previous
         </button>
-        <button className="rounded-lg bg-slate-200 px-4 py-2" onClick={handleClearClick}>
+        <button className="rounded-lg bg-slate-800 px-4 py-2" onClick={handleClearClick}>
           Clear
         </button>
-        <button className="rounded-lg bg-slate-200 px-4 py-2" onClick={handleNextClick}>
+        <button className="rounded-lg bg-slate-800 px-4 py-2" onClick={handleNextClick}>
           Next
         </button>
         <button
@@ -120,7 +122,7 @@ const QuestionActionButtons = () => {
           Submit
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
