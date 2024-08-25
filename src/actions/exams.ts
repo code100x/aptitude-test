@@ -73,8 +73,8 @@ export async function submitExam({
       incorrectAnswers,
     },
   })
-  revalidatePath("/user-results")
-  revalidatePath("/exam-results")
+  revalidatePath('/user-results')
+  revalidatePath('/exam-results')
 
   return {
     id: response.id,
@@ -149,31 +149,47 @@ export async function getExamResults(examId: string) {
   }
 }
 
-export const getUserResults = cache(async () => {
-  const session = await validateRequest()
+export const getUserResults = cache(
+  async (page: number = 1, pageSize: number = 10) => {
+    const session = await validateRequest()
 
-  if (!session || !session.user) {
-    throw new Error('Unauthorized')
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
+
+    const skip = (page - 1) * pageSize
+
+    const [results, totalCount] = await Promise.all([
+      db.examSubmission.findMany({
+        where: { userId: session.user.id },
+        include: {
+          exam: {
+            include: { questions: true },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: pageSize,
+      }),
+      db.examSubmission.count({
+        where: { userId: session.user.id },
+      }),
+    ])
+
+    const totalPages = Math.ceil(totalCount / pageSize)
+
+    return {
+      results: results.map((result) => ({
+        id: result.id,
+        examTitle: result.exam.title,
+        score: result.score,
+        totalQuestions: result.exam.questions.length,
+        timeSpent: result.timeSpent,
+        date: result.createdAt.toISOString(),
+        examId: result.examId,
+      })),
+      totalPages,
+      currentPage: page,
+    }
   }
-
-  const results = await db.examSubmission.findMany({
-    where: { userId: session.user.id },
-    include: {
-      exam: {
-        include: { questions: true },
-      },
-    },
-    orderBy: { createdAt: 'desc' },
-  })
-  console.log(results)
-
-  return results.map((result) => ({
-    id: result.id,
-    examTitle: result.exam.title,
-    score: result.score,
-    totalQuestions: result.exam.questions.length,
-    timeSpent: result.timeSpent,
-    date: result.createdAt.toISOString(),
-    examId: result.examId
-  }))
-})
+)
