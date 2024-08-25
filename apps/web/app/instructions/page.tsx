@@ -23,7 +23,7 @@ const Instructions = () => {
 
   return (
     <main className="flex flex-col p-4">
-      <h1 className="mb-4 text-center text-3xl font-bold">
+      <h1 className="mb-4 mt-8 text-center text-3xl font-bold">
         Please read all the instructions carefully
       </h1>
       <div className="p-6">
@@ -98,16 +98,16 @@ const Instructions = () => {
             question.
           </li>
         </ol>
-        <div className="mt-4 flex items-center space-x-4">
+        <div className="mt-8 flex items-center space-x-4">
           <input
             type="checkbox"
             id="agree"
             name="agreement"
             checked={isTermsChecked}
             onChange={handleChange}
-            className="form-checkbox h-5 w-5 border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="form-checkbox h-5 w-5 border-gray-300"
           />
-          <label htmlFor="agree" className="flex-1 cursor-pointer text-sm text-gray-700">
+          <label htmlFor="agree" className="flex-1 cursor-pointer text-sm text-blue-100">
             I have read and understood the instructions. All computer hardware allotted to me are in
             proper working condition. I declare that I am not in possession of / not wearing / not
             carrying any prohibited gadget like mobile phone, bluetooth devices etc. /any prohibited
@@ -116,7 +116,7 @@ const Instructions = () => {
             action, which may include ban from future Tests / Examinations.
           </label>
         </div>
-        <div className="mt-4 flex w-full justify-center">
+        <div className="my-8 flex w-full justify-center">
           <button
             className="rounded bg-blue-400 p-2 hover:bg-blue-500"
             onClick={handleStartClick}

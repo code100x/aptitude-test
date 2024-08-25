@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
-import { cn } from "@repo/utils";
+import { cn } from "@/lib/utils";
 
 import styles from "./Landing.module.css";
 
@@ -20,7 +20,7 @@ const Landing = () => {
   return (
     <div
       className={cn(
-        `flex h-screen flex-col items-center justify-center bg-[#070e22] ${styles.bgImage}`,
+        `flex h-screen w-screen flex-col items-center justify-center bg-[#070e22] ${styles.bgImage}`,
       )}
     >
       {!!user?.email && (

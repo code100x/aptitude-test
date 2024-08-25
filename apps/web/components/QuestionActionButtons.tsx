@@ -96,13 +96,13 @@ const QuestionActionButtons = () => {
         >
           Save & Next
         </button>
-        <button className="rounded-lg bg-slate-200 px-4 py-2" onClick={handlePrevClick}>
+        <button className="rounded-lg bg-slate-800 px-4 py-2" onClick={handlePrevClick}>
           Previous
         </button>
-        <button className="rounded-lg bg-slate-200 px-4 py-2" onClick={handleClearClick}>
+        <button className="rounded-lg bg-slate-800 px-4 py-2" onClick={handleClearClick}>
           Clear
         </button>
-        <button className="rounded-lg bg-slate-200 px-4 py-2" onClick={handleNextClick}>
+        <button className="rounded-lg bg-slate-800 px-4 py-2" onClick={handleNextClick}>
           Next
         </button>
         <button

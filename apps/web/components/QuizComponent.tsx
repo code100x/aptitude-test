@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { currentQuestionId as recoilCurrentQuestionId, questionsData } from "@repo/store";
 import { QuestionStatus, QuizQuestion } from "@repo/common/config";
 import swal from "sweetalert";
+import { motion } from "framer-motion";
 
 import QuestionSummary from "./QuestionSummary";
 import Timer from "./Timer";
@@ -44,17 +45,24 @@ const QuizComponent = () => {
   }, [currentQuestionId]);
 
   return (
-    <div className="flex p-4">
-      <div className="w-2/3 p-4">
-        <Question />
-        <QuestionActionButtons />
+    <motion.div
+      animate={{ opacity: 1, y: 0 }}
+      className="mx-auto mt-12 px-4"
+      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: 20 }}
+    >
+      <div className="flex p-4">
+        <div className="w-2/3 p-4">
+          <Question />
+          <QuestionActionButtons />
+        </div>
+        <div className="w-1/3">
+          <Timer onComplete={handleTimerComplete} duration={60 * 60 * 2} />
+          <QuestionSummary />
+          <QuestionsPalette />
+        </div>
       </div>
-      <div className="w-1/3">
-        <Timer onComplete={handleTimerComplete} duration={60 * 60 * 2} />
-        <QuestionSummary />
-        <QuestionsPalette />
-      </div>
-    </div>
+    </motion.div>
   );
 };
 

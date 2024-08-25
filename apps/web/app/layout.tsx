@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 
-import { cn } from "@repo/utils";
+import { cn } from "@/lib/utils";
 import { Providers, ThemeProvider } from "@/components/Providers";
 import { inter, satoshi } from "@/styles/fonts";
 
@@ -18,16 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn(satoshi.variable, inter.variable)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextTopLoader color="#fff" height={2} />
-          <Providers>{children}</Providers>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <Providers>
+            <NextTopLoader color="#e2d2" height={2} />
+            {children}
+          </Providers>
         </ThemeProvider>
       </body>
     </html>
