@@ -13,6 +13,7 @@ const Instructions = () => {
   };
   const handleStartClick = () => {
     if (isTermsChecked) {
+      // TODO: Check if already submitted the test
       // navigate to the test
       router.push("/test");
     } else {

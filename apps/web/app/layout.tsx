@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { Providers } from "../components/Providers";
-
-import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-});
+import { cn } from "@repo/utils";
+import { Providers, ThemeProvider } from "@/components/Providers";
+import { inter, satoshi } from "@/styles/fonts";
+
+import "../styles/globals.css";
 
 export const metadata: Metadata = {
   title: "100xQuest",
@@ -26,16 +19,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}>
-        {/* <ThemeProvider
+      <body className={cn(satoshi.variable, inter.variable)}>
+        <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          // enableSystem
+          enableSystem
           disableTransitionOnChange
-        > */}
-        <NextTopLoader color="#2E78C7" height={2} />
-        <Providers>{children}</Providers>
-        {/* </ThemeProvider> */}
+        >
+          <NextTopLoader color="#fff" height={2} />
+          <Providers>{children}</Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

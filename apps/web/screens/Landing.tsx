@@ -2,10 +2,11 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+
+import { cn } from "@repo/utils";
 
 import styles from "./Landing.module.css";
-import { signOut, useSession } from "next-auth/react";
-import { cn } from "../lib/utils";
 
 const Landing = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const Landing = () => {
   const user = session.data?.user;
 
   const handleClick = () => {
-    router.push(user?.email?.length ? "/instructions" : "/auth");
+    router.push("/instructions");
   };
 
   return (
