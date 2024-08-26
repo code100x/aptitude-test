@@ -7,6 +7,9 @@ import { cache } from 'react'
 
 export const getExams = cache(async () => {
   const response = await db.exam.findMany({
+    where: {
+      published: true,
+    },
     select: {
       id: true,
       title: true,
@@ -15,6 +18,25 @@ export const getExams = cache(async () => {
       price: true,
     },
   })
+  return response
+})
+export const getExamsQues = cache(async (examId: string) => {
+  const response = await db.exam.findUnique({
+    where: {
+      id: examId,
+    },
+    select: {
+      questions: {
+        select: {
+          id: true,
+          text: true,
+          correctAnswer: true,
+          options: true,
+        },
+      },
+    },
+  })
+
   return response
 })
 

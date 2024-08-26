@@ -18,9 +18,9 @@ import {
 interface Exam {
   id: string
   title: string
+  duration: number | null
   description: string
-  duration: number
-  price: number
+  price: number | null
 }
 
 export default function AvailableExams({ exams }: { exams: Exam[] }) {
@@ -88,7 +88,9 @@ export default function AvailableExams({ exams }: { exams: Exam[] }) {
                   </div>
                   <div className='flex items-center text-foreground font-semibold'>
                     <CreditCard className='mr-2 h-4 w-4' />
-                    <span>INR {exam.price}</span>
+                    <span>
+                      {exam.price === 0 ? 'FREE' : `INR ${exam.price}`}
+                    </span>
                   </div>
                 </CardContent>
                 <CardFooter>

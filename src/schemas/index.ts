@@ -34,7 +34,19 @@ const passwordRequirements = [
 
 const usernameRegex = /^[a-zA-Z0-9_-]{3,30}$/
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
+export type QuestionBankType = {
+  id: string
+  userId: string
+  examId: string
+  createdAt: Date
+  updatedAt: Date
+}
+export type questionFormType = z.infer<typeof QuestionFormSchema>
+export const QuestionFormSchema = z.object({
+  text: z.string().min(5),
+  options: z.array(z.string().nonempty(' option must be non-empty string')),
+  correctAnswer: z.number().int().min(0).max(3),
+})
 export const signUpSchema = z
   .object({
     displayName: z
