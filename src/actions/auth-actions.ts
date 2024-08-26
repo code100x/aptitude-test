@@ -49,6 +49,20 @@ export const signUp = async (values: signUpValues) => {
       data: { username, email, hashedPassword: passwordHash, displayName },
     })
 
+    const customExam = await db.exam.create({
+      data: {
+        title: 'Custom Test',
+        description: 'This is a custom Test from your own Question Bank',
+        duration: 120,
+        price: 0,
+        published: false,
+      },
+    })
+
+    await db.questionBank.create({
+      data: { userId: user.id, examId: customExam.id },
+    })
+
     const code = generateVerificationCode()
 
     await db.verificationEmail.create({

@@ -25,8 +25,21 @@ model User {
   passwordReset      PasswordResetToken?
   examSubmissions    ExamSubmission[]
   ExamProgress       ExamProgress[]
+  QuestionBank       QuestionBank?
 
   @@map("users")
+}
+
+model QuestionBank {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examId    String   @unique
+  exam      Exam     @relation(fields: [examId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("question_banks")
 }
 
 enum Role {
@@ -95,11 +108,14 @@ model Exam {
   description  String
   price        Int
   duration     Int
+  shuffleQues  Boolean          @default(false)
+  published    Boolean          @default(true)
   questions    Question[]
   submissions  ExamSubmission[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   ExamProgress ExamProgress[]
+  QuestionBank QuestionBank?
 
   @@map("exams")
 }

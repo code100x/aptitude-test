@@ -6,7 +6,8 @@ import {
   MedalIcon,
   Library,
   LucideIcon,
-  HomeIcon
+  HomeIcon,
+  MailQuestion,
 } from 'lucide-react'
 
 export const applicationName = '100xDevs'
@@ -85,7 +86,6 @@ export const cohort_lists = [
   },
 ]
 
-
 type Submenu = {
   href: string
   label: string
@@ -134,6 +134,13 @@ export function getMenuList(pathname: string): Group[] {
           label: 'Results',
           active: pathname === '/user-results',
           icon: MedalIcon,
+          submenus: [],
+        },
+        {
+          href: '/question-bank',
+          label: 'Question Bank',
+          active: pathname === '/question-bank',
+          icon: MailQuestion,
           submenus: [],
         },
       ],
