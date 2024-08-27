@@ -56,7 +56,8 @@ export default function ExamComponent({
   const [showTabWarning, setShowTabWarning] = useState(false)
   const [showFullscreenWarning, setShowFullscreenWarning] = useState(false)
   const [warningCount, setWarningCount] = useState(0)
-  const [isFullscreen, setIsFullscreen] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(true);
+  const [visited,setVisited] = useState<Set<number>>(new Set<number>().add(currentQuestion));
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -184,10 +185,26 @@ export default function ExamComponent({
       setShowExitDialog(true)
     } else {
       setCurrentQuestion((prev) => Math.min(questions.length - 1, prev + 1))
-    }
+    }  
+    const visitedCopy = new Set(visited);
+    visitedCopy.add(currentQuestion + 1);
+    setVisited(visitedCopy);
   }, [currentQuestion, questions.length])
 
+
   return (
+    <>
+    <div className='flex justify-center gap-4'> <div className='flex items-center'>
+    <Clock className='mr-2 text-blue-500' size={20} />
+    <span>{formatTime(timeRemaining)}</span>
+  </div>
+    {warningCount > 0 && (
+      <div className='flex items-center text-yellow-500'>
+        <AlertTriangle size={20} className='mr-1' />
+        <span>{warningCount}</span>
+      </div>
+    )}
+  </div>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -252,7 +269,15 @@ export default function ExamComponent({
             >
               Previous
             </Button>
-            <Button
+              <Button onClick={() => {
+                let answersCopy = { ...answers };
+                delete answersCopy[questions[currentQuestion].id]
+                setAnswers({ ...answersCopy });
+                setAnswers((prev) => ({
+                }))
+              }}>Clear Response
+              </Button>
+              <Button
               onClick={handleMarkForReview}
               variant='outline'
               className='border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white'
@@ -275,17 +300,17 @@ export default function ExamComponent({
       <div className='lg:col-span-1 w-full'>
         <Card className='h-full flex flex-col shadow-lg'>
           <CardHeader className='bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50'>
-            <CardTitle className='text-lg font-semibold flex justify-between items-center'>
-              <div className='flex items-center'>
-                <Clock className='mr-2 text-blue-500' size={20} />
-                <span>{formatTime(timeRemaining)}</span>
-              </div>
-              {warningCount > 0 && (
-                <div className='flex items-center text-yellow-500'>
-                  <AlertTriangle size={20} className='mr-1' />
-                  <span>{warningCount}</span>
-                </div>
-              )}
+            <CardTitle className='text-lg font-semibold  justify-between items-center'>
+             <div className='flex justify-around gap-2'>
+              <div className='flex'><div className='w-6 p-2 h-6 text-xs text-white rounded-t-full bg-green-500'>{Object.keys(answers).length}</div> <span className='text-[10px] pl-1 font-light'>Answered</span></div>
+              <div className='flex'><div className='w-6 p-2 pb-6 h-6 text-xs rounded-full text-white bg-indigo-600'>{markedQuestions.size}</div> <span className='text-[10px] pl-1 font-light'>Marked</span></div>
+              
+             </div>
+             <br />
+             <div className='flex justify-around gap-2 ml-3'>
+             <div className='flex items-center'><div className='w-6 pb-3 pl-1 pt-1 h-6 text-xs text-black border-solid border-2 border-slate-500 '>{questions.length-visited.size}</div> <span className='text-[10px] pl-1 font-light'>Not Visited</span></div>
+             <div className='flex items-center relative left-[18px]'><div className='w-6 p-2 h-6 pt-1 pb-4 ml-1  text-xs text-white rounded-b-full bg-red-500'>{questions.length- Object.keys(answers).length}</div><span className='text-[10px] pl-1 font-light'>Not Answered</span></div>
+             </div>
             </CardTitle>
           </CardHeader>
           <CardContent className='flex-1 overflow-hidden p-4'>
@@ -303,7 +328,12 @@ export default function ExamComponent({
                           ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-100'
                           : 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-100'
                     }`}
-                    onClick={() => setCurrentQuestion(index)}
+                    onClick={() => {
+                      setCurrentQuestion(index);
+                      const copy = new Set(visited);
+                      copy.add(index);
+                      setVisited(copy);
+                    }}
                   >
                     {index + 1}
                   </motion.button>
@@ -379,5 +409,6 @@ export default function ExamComponent({
         </AlertDialogContent>
       </AlertDialog>
     </motion.div>
+    </>
   )
 }
