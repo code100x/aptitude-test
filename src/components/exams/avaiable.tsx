@@ -1,10 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion, useAnimation } from 'framer-motion'
-import { Clock, CreditCard } from 'lucide-react'
+import { Clock, CreditCard, Loader2 } from 'lucide-react'
+import { User } from 'lucia'
+import { toast } from 'sonner'
 
+import { processPayment } from '@/lib/payment'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,8 +26,17 @@ interface Exam {
   price: number
 }
 
-export default function AvailableExams({ exams }: { exams: Exam[] }) {
+export default function AvailableExams({
+  exams,
+  user,
+}: {
+  exams: Exam[]
+  user: User
+}) {
   const controls = useAnimation()
+  const router = useRouter()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     controls.start((i) => ({
@@ -44,10 +56,31 @@ export default function AvailableExams({ exams }: { exams: Exam[] }) {
     return colors[index % colors.length]
   }
 
+  const handlePaymentSuccess = (examId: string) => {
+    // TODO: There's a slight delay in the navigation but later paymentStatus will be stored in the DB here instead of navigation
+    router.push(`/take/${examId}`)
+    setIsLoading(false)
+  }
+
+  const handlePaymentCancelClick = () => {
+    toast.error('Payment cancelled!')
+    setIsLoading(false)
+  }
+
+  const handleTakeTestClick = async (examId: string, amount: number) => {
+    setIsLoading(true)
+    await processPayment({
+      amount,
+      successCallback: () => handlePaymentSuccess(examId),
+      cancelCallback: handlePaymentCancelClick,
+      user,
+    })
+  }
+
   return (
     <div className='min-h-screen'>
       <div className='mx-auto px-4 py-12'>
-        <div className='mb-12 flex justify-between items-center'>
+        <div className='mb-12 flex items-center justify-between'>
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -56,7 +89,7 @@ export default function AvailableExams({ exams }: { exams: Exam[] }) {
             <h1 className='text-4xl font-bold text-foreground'>
               Available Exams
             </h1>
-            <p className='mt-2 text-lg text-muted-foreground max-w-2xl'>
+            <p className='mt-2 max-w-2xl text-lg text-muted-foreground'>
               Choose from our selection of professional exams to test and
               certify your skills.
             </p>
@@ -73,27 +106,35 @@ export default function AvailableExams({ exams }: { exams: Exam[] }) {
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
               <Card
-                className={`h-full flex flex-col bg-gradient-to-br ${getGradientColor(
+                className={`flex h-full flex-col bg-gradient-to-br ${getGradientColor(
                   index
-                )} hover:shadow-lg transition-all duration-300 border border-secondary`}
+                )} border border-secondary transition-all duration-300 hover:shadow-lg`}
               >
                 <CardHeader>
-                  <CardTitle className='text-xl mb-2'>{exam.title}</CardTitle>
+                  <CardTitle className='mb-2 text-xl'>{exam.title}</CardTitle>
                   <CardDescription>{exam.description}</CardDescription>
                 </CardHeader>
                 <CardContent className='flex-grow'>
-                  <div className='flex items-center mb-4 text-muted-foreground'>
+                  <div className='mb-4 flex items-center text-muted-foreground'>
                     <Clock className='mr-2 h-4 w-4' />
                     <span>{exam.duration} minutes</span>
                   </div>
-                  <div className='flex items-center text-foreground font-semibold'>
+                  <div className='flex items-center font-semibold text-foreground'>
                     <CreditCard className='mr-2 h-4 w-4' />
                     <span>INR {exam.price}</span>
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button asChild className='w-full'>
-                    <Link href={`/take/${exam.id}`}>Take Test</Link>
+                  <Button
+                    className='w-full'
+                    disabled={isLoading}
+                    onClick={() => handleTakeTestClick(exam.id, exam.price)}
+                  >
+                    {isLoading ? (
+                      <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    ) : (
+                      'Pay & Take Test'
+                    )}
                   </Button>
                 </CardFooter>
               </Card>

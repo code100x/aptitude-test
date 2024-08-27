@@ -107,7 +107,6 @@ body {
   --bg-opacity: 0.5;
 }
 
-
 ::view-transition-group(root) {
   animation-duration: 0.7s;
   animation-timing-function: linear(
@@ -201,4 +200,11 @@ body {
   100% {
     opacity: 0;
   }
+}
+/* required as there was a white background by default */
+.razorpay-container {
+  height: 70% !important;
+  max-width: 380px;
+  inset: 0;
+  margin: auto;
 }

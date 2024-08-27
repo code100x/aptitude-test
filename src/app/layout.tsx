@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import NextTopLoader from 'nextjs-toploader'
+import Script from 'next/script'
+import { Toaster } from 'sonner'
+
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ScrollToTopButton } from '@/components/global/scroll-to-top-button'
-import { Toaster } from 'sonner'
-import NextTopLoader from 'nextjs-toploader'
+
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,6 +37,10 @@ export default function RootLayout({
           <Toaster richColors closeButton position='bottom-right' expand />
         </ThemeProvider>
       </body>
+      <Script
+        id='razorpay-checkout-js'
+        src='https://checkout.razorpay.com/v1/checkout.js'
+      />
     </html>
   )
 }
