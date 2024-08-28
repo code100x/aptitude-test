@@ -93,7 +93,7 @@ export default function AvailableExams({ exams }: { exams: Exam[] }) {
                 </CardContent>
                 <CardFooter>
                   <Button asChild className='w-full'>
-                    <Link href={`/take/${exam.id}`}>Take Test</Link>
+                    <Link href={`/exam-detail/${exam.id}`}>Take Test</Link>
                   </Button>
                 </CardFooter>
               </Card>

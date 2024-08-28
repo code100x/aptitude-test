@@ -13,7 +13,7 @@ export default async function Layout({
   return (
     <SessionProvider value={session}>
       <div className='flex min-h-screen flex-col'>
-        <div className='mx-auto mt-12 p-5'>{children}</div>
+        <div className='mx-auto mt-12 p-5 f'>{children}</div>
       </div>
     </SessionProvider>
   )

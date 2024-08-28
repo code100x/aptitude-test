@@ -25,6 +25,7 @@ model User {
   passwordReset      PasswordResetToken?
   examSubmissions    ExamSubmission[]
   ExamProgress       ExamProgress[]
+  Comments           Comment[]
 
   @@map("users")
 }
@@ -100,6 +101,7 @@ model Exam {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   ExamProgress ExamProgress[]
+  Comments     Comment[]
 
   @@map("exams")
 }
@@ -152,4 +154,17 @@ model ExamProgress {
   user User @relation(fields: [userId], references: [id])
 
   @@unique([examId, userId])
+}
+
+model Comment{
+  id     String @id @default(cuid())
+  userId String
+  content   String
+  postedAt DateTime @default(now())
+  examId  String
+  parentId String?
+  parent       Comment?    @relation("ParentComment", fields: [parentId], references: [id])
+  children     Comment[]   @relation("ParentComment")
+  exam Exam @relation(fields: [examId], references: [id],onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
 }

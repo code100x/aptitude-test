@@ -86,6 +86,8 @@ export async function submitExam({
 }
 
 export async function getExamData(examId: string) {
+  const session = await validateRequest()
+
   try {
     const exam = await db.exam.findUnique({
       where: { id: examId },
@@ -115,6 +117,11 @@ export async function getExamData(examId: string) {
         text: q.text,
         options: q.options,
       })),
+      me: {
+        imageUrl: session.user?.imageUrl,
+        username: session.user?.username,
+        email: session.user?.email,
+      },
     }
   } catch (error) {
     console.error('Error fetching exam data:', error)
@@ -146,6 +153,96 @@ export async function getExamResults(examId: string) {
     warningCount: submission.warningCount,
     correctAnswers: submission.correctAnswers,
     incorrectAnswers: submission.incorrectAnswers,
+  }
+}
+
+export const getExamComments = cache(
+  async (examId: string, page: number = 1, pageSize: number = 10) => {
+    const session = await validateRequest()
+
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
+    const skip = (page - 1) * pageSize
+    try {
+      const [comments, totalCount] = await Promise.all([
+        db.comment.findMany({
+          where: { examId: examId, parentId: null },
+          include: {
+            user: true,
+            children: {
+              select: {
+                user: true,
+                content: true,
+                postedAt: true,
+              },
+            },
+          },
+          orderBy: { postedAt: 'desc' },
+          skip: skip,
+          take: pageSize,
+        }),
+        db.comment.count({ where: { examId: examId, parentId: null } }),
+      ])
+      const totalPages = Math.ceil(totalCount / pageSize)
+
+      return {
+        comments,
+        totalPages,
+        currentPage: page,
+      }
+    } catch (error) {
+      console.error('Error fetching exam data:', error)
+      throw new Error('Failed to fetch exam data')
+    }
+  }
+)
+
+export const addExamComment = async (examId: string, content: string) => {
+  const session = await validateRequest()
+
+  if (!session || !session.user) {
+    throw new Error('Unauthorized')
+  }
+  try {
+    const ff = await db.comment.create({
+      data: { content, examId, userId: session.user.id },
+    })
+    return {
+      message: 'succesfully added:)',
+      imageUrl: session.user.imageUrl,
+      postedAt: ff.postedAt,
+      username: session.user.username,
+      email: session.user.email,
+    }
+  } catch (error) {
+    console.error('Error while adding comment:', error)
+    throw new Error('Failed to add exam comment')
+  }
+}
+
+export const addRepylToCommet = async (
+  examId: string,
+  commentId: string,
+  content: string
+) => {
+  const session = await validateRequest()
+
+  if (!session || !session.user) {
+    throw new Error('Unauthorized')
+  }
+  try {
+    await db.comment.create({
+      data: {
+        content,
+        examId,
+        userId: session.user.id,
+        parentId: commentId,
+      },
+    })
+  } catch (error) {
+    console.error('Error while adding comment:', error)
+    throw new Error('Failed to add exam comment')
   }
 }
 

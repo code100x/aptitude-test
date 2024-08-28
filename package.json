@@ -17,7 +17,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@lucia-auth/adapter-prisma": "^4.0.1",
-    "@node-rs/argon2-linux-arm64-musl": "^1.8.3",
+    "@node-rs/argon2": "^1.8.3",
     "@prisma/client": "^5.18.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
