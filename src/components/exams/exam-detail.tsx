@@ -231,21 +231,40 @@ const Examdetail = ({ exam, examId }: { exam: any; examId: string }) => {
                       seleComment.id,
                       rep
                     )
+          
+                   setSeleComment((prev: any) => {
+                      const updatedChildren = prev?.children
+                        ? [
+                            ...prev.children,
+                            {
+                              content: rep,
+                              postedAt: Date.now(),
+                              user: {
+                                imageUrl: exam.me.imageUrl,
+                                username: exam.me.username,
+                                email: exam.me.email,
+                              },
+                            },
+                          ]
+                        : [
+                            {
+                              content: rep,
+                              postedAt: Date.now(),
+                              user: {
+                                imageUrl: exam.me.imageUrl,
+                                username: exam.me.username,
+                                email: exam.me.email,
+                              },
+                            },
+                          ]
+
+                      return {
+                        ...prev,
+                        children: updatedChildren,
+                      }
+                    })
                     setReply('')
                     setRefetch(!refetch)
-
-                    setSeleComment((prev: any) => {
-                      prev?.children.push({
-                        content: rep,
-                        postedAt: Date.now(),
-                        user: {
-                          imageUrl: exam.me.imageUrl,
-                          username: exam.me.username,
-                          email: exam.me.email,
-                        },
-                      })
-                      return prev
-                    })
                     setAddLoding(false)
                     toast.success('Added successfully:)')
                   } catch (err) {
