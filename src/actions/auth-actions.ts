@@ -99,12 +99,12 @@ export const login = async (values: loginValues) => {
       return { error: 'Invalid email or password' }
     }
 
-    // if (!user.emailVerified) {
-    //   return {
-    //     error:
-    //       'Email is not verified. Please check your email for the verification link.',
-    //   }
-    // }
+    if (!user.emailVerified) {
+      return {
+        error:
+          'Email is not verified. Please check your email for the verification link.',
+      }
+    }
 
     const session = await lucia.createSession(user.id, {})
     const sessionCookie = lucia.createSessionCookie(session.id)
