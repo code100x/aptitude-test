@@ -35,7 +35,7 @@ export const InfoBar = async ({ className }: InfoBarProps) => {
           )}
         >
           <Image
-            src='https://d2szwvl7yo497w.cloudfront.net/courseThumbnails/main.png'
+            src='/logo.png'
             alt='logo'
             width={40}
             height={40}

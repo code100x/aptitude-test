@@ -30,7 +30,7 @@ export const Sidebar = () => {
           <div className=' w-8 h-8 mr-auto'>
             <Image
               src={
-                'https://d2szwvl7yo497w.cloudfront.net/courseThumbnails/main.png'
+                '/logo.png'
               }
               alt='Sidebar Logo'
               width={100}

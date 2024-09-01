@@ -44,7 +44,7 @@ export const SheetMenu = ({ className }: SheetMenuProps) => {
           <AspectRatio ratio={16 / 5} className=' mb-3 md:mb-5 rounded-full'>
             <Image
               src={
-                'https://d2szwvl7yo497w.cloudfront.net/courseThumbnails/main.png'
+                '/logo.png'
               }
               alt='Sidebar Logo'
               fill
