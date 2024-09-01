@@ -40,10 +40,7 @@ type Exam = {
 }
 
 export default function AvailableExams() {
-  const { exams, setExams } = useGlobalStore((state) => ({
-    exams: state.exams,
-    setExams: state.setExams,
-  }))
+  const { exams, setExams } = useGlobalStore()
 
   const [selectedExam, setSelectedExam] = useState<Exam | null>(null)
   const [isCreateModalOpen, setCreateModalOpen] = useState(false)
@@ -69,8 +66,9 @@ export default function AvailableExams() {
   const fetchExams = async () => {
     try {
       const response = await getExams()
-      if (response.success) {
-        setExams(response.exams)
+      console.log("Response=> ", response);
+      if (response.success && response.data) {
+        setExams(response.data)
       } else {
         console.error('Failed to fetch exams')
       }
@@ -113,7 +111,7 @@ export default function AvailableExams() {
   return (
     <div className='min-h-screen w-full'>
       <div className='mx-auto px-4 py-12'>
-        <div className='mb-12 mr-16 flex justify-between items-center'>
+        <div className='mb-12 md:mr-16 flex justify-start md:justify-between'>
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -140,7 +138,7 @@ export default function AvailableExams() {
               <motion.div
                 key={exam.id}
                 custom={index}
-                initial={{ opacity: 0, y: 0 }}
+                initial={{ opacity: 1, y: 1 }}
                 animate={controls}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >

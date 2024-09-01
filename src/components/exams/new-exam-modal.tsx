@@ -5,11 +5,10 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createExamSchema, CreateExamValues } from '@/schemas'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { X } from 'lucide-react'
-import { createExam, getExams, updateExam } from '@/actions/exams'
+import { createExam, updateExam } from '@/actions/exams'
 import { useGlobalStore } from '@/store'
 
 type DefaultValues = {
@@ -36,6 +35,7 @@ export const NewExamModal = ({
   trigger,
   fetchExams,
 }: NewExamModalProps) => {
+  const { exams, setExams } = useGlobalStore()
   const {
     register,
     handleSubmit,
@@ -71,23 +71,20 @@ export const NewExamModal = ({
           return
         }
         const examData = { id: defaultValues?.id, ...data }
+        response = await updateExam(examData)
 
-        const response = await updateExam(examData)
-
-        if (response.success) {
-          toast.success('Exam updated successfully!')
-        }
+        toast.success('Exam updated successfully!')
       } else {
         response = await createExam(data)
-        if (response.succes) {
-          toast.success('Exam created successfully!')
-        }
+        toast.success('Exam created successfully!')
       }
 
-      if (response?.succes) {
+      if (response && response.data) {
         fetchExams()
         onClose()
         reset()
+      } else {
+        toast.error('Failed to save exam.')
       }
     } catch (error) {
       console.error('Error handling exam:', error)
@@ -101,15 +98,22 @@ export const NewExamModal = ({
       <Dialog.Content className='fixed inset-0 z-50 overflow-y-auto'>
         <div className='flex items-center justify-center min-h-screen'>
           <Dialog.DialogOverlay className='fixed inset-0 bg-black opacity-30' />
-          <div className='relative bg-white rounded-lg w-96 max-w-full p-6'>
-            <Dialog.Close
-              onClick={onClose}
-              className='absolute top-3 right-3 text-black hover:text-gray-700 focus:outline-none'
-            >
-              <X size={20} />
-            </Dialog.Close>
+          <div className='relative bg-white rounded-lg w-96 max-w-full '>
+            <div className='flex justify-between items-center bg-primary text-white rounded-t-md px-6 py-2'>
+              <Dialog.Title className='text-md font-medium  '>
+                {defaultValues ? 'Edit Exam' : 'Create New Exam'}
+              </Dialog.Title>
+
+              <Dialog.Close
+                onClick={onClose}
+                className='  hover:text-gray-700 focus:outline-none'
+              >
+                <X size={20} />
+              </Dialog.Close>
+            </div>
+
             <form
-              className='space-y-4'
+              className='space-y-4 p-6'
               onSubmit={handleSubmit(handleCreateOrUpdateExam)}
             >
               <div>

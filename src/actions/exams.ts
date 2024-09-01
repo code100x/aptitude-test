@@ -32,11 +32,20 @@ interface SubmitExamParams {
 
 export const createExam = cache(async (examData: CreateExamInput) => {
   try {
-    await db.exam.create({
+    const createdExam = await db.exam.create({
       data: examData,
     })
 
-    return { succes: true }
+    const responseData = {
+      id: createdExam.id,
+      title: createdExam.title,
+      description: createdExam.description,
+      duration: createdExam.duration,
+      price: createdExam.price,
+      numQuestions: createdExam.numQuestions,
+    }
+
+    return { succes: true, data: responseData }
   } catch (error) {
     console.error('Error creating exam:', error)
     throw new Error('Failed to create exam')
@@ -49,7 +58,6 @@ export const updateExam = cache(async (examData: UpdateExamInput) => {
 
     const totalAvailableQuestions = await db.question.findMany()
 
-    // Check if numQuestions is defined and perform the check
     if (
       updateFields.numQuestions !== undefined &&
       updateFields.numQuestions > totalAvailableQuestions.length
@@ -64,7 +72,7 @@ export const updateExam = cache(async (examData: UpdateExamInput) => {
       data: updateFields,
     })
 
-    return { success: true, updatedExam }
+    return { success: true, data: updatedExam }
   } catch (error) {
     console.error('Error updating exam:', error) // Add more detailed error logging for debugging
     throw new Error('Failed to update exam')
@@ -83,8 +91,11 @@ export const getExams = async () => {
         numQuestions: true,
       },
       where: { isDeleted: false },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
-    return { success: true, exams: response }
+    return { success: true, data: response }
   } catch (error) {
     console.error('Error fetching exam:', error)
     throw new Error('Failed to fetch exam')
@@ -309,7 +320,6 @@ export async function getExamResults(examId: string) {
 
 export const getUserResults = cache(
   async (page: number = 1, pageSize: number = 10) => {
-
     const session = await validateRequest()
     if (!session || !session.user) {
       throw new Error('Unauthorized')
@@ -319,7 +329,6 @@ export const getUserResults = cache(
     const skip = (page - 1) * pageSize
 
     try {
-  
       const [submissions, totalCount] = await Promise.all([
         db.examSubmission.findMany({
           where: { userId: session.user.id },
@@ -332,9 +341,9 @@ export const getUserResults = cache(
         }),
       ])
 
-     const examIds = submissions
-       .map((submission) => submission.examId)
-       .filter((value, index, self) => self.indexOf(value) === index)
+      const examIds = submissions
+        .map((submission) => submission.examId)
+        .filter((value, index, self) => self.indexOf(value) === index)
 
       const [exams, questions] = await Promise.all([
         db.exam.findMany({
@@ -349,13 +358,11 @@ export const getUserResults = cache(
         }),
       ])
 
-     
       const examsMap = new Map(exams.map((exam) => [exam.id, exam]))
       const questionsMap = new Map(
         questions.map((question) => [question.id, question])
       )
 
- 
       const results = submissions.map((submission) => {
         const exam = examsMap.get(submission.examId)
         if (!exam) {
@@ -381,9 +388,7 @@ export const getUserResults = cache(
         }
       })
 
-
       const totalPages = Math.ceil(totalCount / pageSize)
-
 
       return {
         results,
