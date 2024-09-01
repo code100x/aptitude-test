@@ -13,6 +13,7 @@ interface ExamData {
   description: string
   price: number
   duration: number
+  numQuestions: number
   questions: Question[]
 }
 
@@ -85,11 +86,7 @@ export default function MultiStepExamPage({
           exit={{ opacity: 0 }}
         >
           <ExamInstructions
-            examId={examData.id}
-            examTitle={examData.title}
-            examDescription={examData.description}
-            examPrice={examData.price}
-            examDuration={examData.duration}
+            examData={examData}
             onStart={handleStartExam}
             onCancel={handleCancelExam}
           />

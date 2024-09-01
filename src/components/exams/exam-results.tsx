@@ -31,8 +31,8 @@ interface ExamResultsProps {
     totalQuestions: number
     timeSpent: number
     warningCount: number
-    correctAnswers: number[]
-    incorrectAnswers: number[]
+    correctAnswers: string[]
+    incorrectAnswers: string[]
   }
 }
 

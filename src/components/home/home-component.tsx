@@ -61,7 +61,7 @@ export default function Home() {
         />
         <PolygonTexture
           clipClassName='bg-gradient-to-r from-[hsl(var(--primary))] via-[#9182ff] to-[hsl(var(--primary))]'
-          className='z-30'
+          className='z-3'
         />
 
         <main>

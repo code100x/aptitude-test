@@ -95,8 +95,8 @@ model Exam {
   description  String
   price        Int
   duration     Int
-  questions    Question[]
-  submissions  ExamSubmission[]
+  numQuestions Int              @default(1)
+  isDeleted    Boolean          @default(false)
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   ExamProgress ExamProgress[]
@@ -106,15 +106,13 @@ model Exam {
 
 model Question {
   id            String   @id @default(cuid())
-  examId        String
-  exam          Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
   text          String
   options       String[]
+  image         String?
   correctAnswer Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  @@index([examId])
   @@map("questions")
 }
 
@@ -123,13 +121,13 @@ model ExamSubmission {
   userId           String
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   examId           String
-  exam             Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questions        String[]
   answers          Json
   score            Int
   timeSpent        Int
   warningCount     Int      @default(0)
-  correctAnswers   Int[]
-  incorrectAnswers Int[]
+  correctAnswers   String[]
+  incorrectAnswers String[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

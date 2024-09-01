@@ -14,7 +14,7 @@ export const Sidebar = () => {
   return (
     <aside
       className={cn(
-        'fixed top-0 left-0 z-[30] h-screen -translate-x-full border-r border-secondary lg:translate-x-0 transition-[width] ease-in-out duration-300',
+        'fixed top-0 left-0 h-screen z-[1] -translate-x-full border-r border-secondary lg:translate-x-0 transition-[width] ease-in-out duration-300',
         sidebar?.isOpen === false ? 'w-[90px]' : 'w-72'
       )}
     >

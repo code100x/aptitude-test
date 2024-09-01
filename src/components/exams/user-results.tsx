@@ -236,7 +236,7 @@ const ResultRow: React.FC<ResultRowProps> = React.memo(
       </TableCell>
       <TableCell>{new Date(result.date).toLocaleDateString()}</TableCell>
       <TableCell>
-        <Button size='sm' onClick={() => onViewDetails(result.id)}>
+        <Button size='sm' onClick={() => onViewDetails(result.examId)}>
           View Details
         </Button>
       </TableCell>
