@@ -57,11 +57,10 @@ export default function AvailableExams({
   }
 
   const handlePaymentSuccess = (examId: string) => {
-    // TODO: There's a slight delay in the navigation but later paymentStatus will be stored in the DB here instead of navigation
     router.push(`/take/${examId}`)
   }
 
-  const handleTakeTestClick = async (examId: string, amount: number) => {
+  const handleTakeTestClick = (examId: string, amount: number) => async () => {
     setIsLoading(true)
     await processPayment({
       amount,
@@ -123,7 +122,7 @@ export default function AvailableExams({
                   <Button
                     className='w-full'
                     disabled={isLoading}
-                    onClick={() => handleTakeTestClick(exam.id, exam.price)}
+                    onClick={handleTakeTestClick(exam.id, exam.price)}
                   >
                     {isLoading ? (
                       <Loader2 className='mr-2 h-4 w-4 animate-spin' />
