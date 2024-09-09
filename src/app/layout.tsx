@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
-import Script from 'next/script'
 import { Toaster } from 'sonner'
 
 import { ThemeProvider } from '@/components/providers/theme-provider'
@@ -37,10 +36,6 @@ export default function RootLayout({
           <Toaster richColors closeButton position='bottom-right' expand />
         </ThemeProvider>
       </body>
-      <Script
-        id='razorpay-checkout-js'
-        src='https://checkout.razorpay.com/v1/checkout.js'
-      />
     </html>
   )
 }

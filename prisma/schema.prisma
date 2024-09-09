@@ -25,6 +25,7 @@ model User {
   passwordReset      PasswordResetToken?
   examSubmissions    ExamSubmission[]
   ExamProgress       ExamProgress[]
+  payments           Payment[]
 
   @@map("users")
 }
@@ -100,6 +101,7 @@ model Exam {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   ExamProgress ExamProgress[]
+  payments     Payment[]
 
   @@map("exams")
 }
@@ -152,4 +154,20 @@ model ExamProgress {
   user User @relation(fields: [userId], references: [id])
 
   @@unique([examId, userId])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  userId    String
+  examId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  amount    Int
+  status    String
+  orderId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, examId])
+  @@map("payments")
 }

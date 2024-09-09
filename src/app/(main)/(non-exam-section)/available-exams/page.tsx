@@ -9,7 +9,9 @@ const Page = async () => {
   const session = await validateRequest()
   const user = session?.user
 
-  return user && <AvailableExams exams={data} user={user} />
+  if (!user) return null
+
+  return <AvailableExams exams={data} user={user} />
 }
 
 export default Page

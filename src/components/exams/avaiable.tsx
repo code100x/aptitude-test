@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation'
 import { motion, useAnimation } from 'framer-motion'
 import { Clock, CreditCard, Loader2 } from 'lucide-react'
 import { User } from 'lucia'
-import { toast } from 'sonner'
+import { useRazorpay } from '@/hooks/use-razorpay'
 
-import { processPayment } from '@/lib/payment'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -35,6 +34,7 @@ export default function AvailableExams({
 }) {
   const controls = useAnimation()
   const router = useRouter()
+  const processPayment = useRazorpay()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -59,22 +59,17 @@ export default function AvailableExams({
   const handlePaymentSuccess = (examId: string) => {
     // TODO: There's a slight delay in the navigation but later paymentStatus will be stored in the DB here instead of navigation
     router.push(`/take/${examId}`)
-    setIsLoading(false)
-  }
-
-  const handlePaymentCancelClick = () => {
-    toast.error('Payment cancelled!')
-    setIsLoading(false)
   }
 
   const handleTakeTestClick = async (examId: string, amount: number) => {
     setIsLoading(true)
     await processPayment({
       amount,
+      examId,
       successCallback: () => handlePaymentSuccess(examId),
-      cancelCallback: handlePaymentCancelClick,
       user,
     })
+    setIsLoading(false)
   }
 
   return (
