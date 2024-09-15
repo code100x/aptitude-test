@@ -3,11 +3,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion, useAnimation } from 'framer-motion'
+import { User } from 'lucia'
+import { useRazorpay } from '@/hooks/use-razorpay'
 import {
   Clock,
   CreditCard,
+   Loader2,
   FilePlus2,
   FileQuestion,
   Pencil,
@@ -39,8 +42,11 @@ type Exam = {
   price: number
 }
 
-export default function AvailableExams() {
-  const { exams, setExams } = useGlobalStore()
+export default function AvailableExams({ user }: { user: User }) {
+  const { exams, setExams } = useGlobalStore((state) => ({
+    exams: state.exams,
+    setExams: state.setExams,
+  }))
 
   const [selectedExam, setSelectedExam] = useState<Exam | null>(null)
   const [isCreateModalOpen, setCreateModalOpen] = useState(false)
@@ -50,6 +56,10 @@ export default function AvailableExams() {
   const [examToDelete, setExamToDelete] = useState<string | null>(null)
 
   const controls = useAnimation()
+  const router = useRouter()
+  const processPayment = useRazorpay()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     controls.start((i) => ({
@@ -108,6 +118,21 @@ export default function AvailableExams() {
     return colors[index % colors.length]
   }
 
+  const handlePaymentSuccess = (examId: string) => {
+    router.push(`/take/${examId}`)
+  }
+
+  const handleTakeTestClick = (examId: string, amount: number) => async () => {
+    setIsLoading(true)
+    await processPayment({
+      amount,
+      examId,
+      successCallback: () => handlePaymentSuccess(examId),
+      user,
+    })
+    setIsLoading(false)
+  }
+
   return (
     <div className='min-h-screen w-full'>
       <div className='mx-auto px-4 py-12'>
@@ -120,7 +145,7 @@ export default function AvailableExams() {
             <h1 className='text-4xl font-bold text-foreground'>
               Available Exams
             </h1>
-            <p className='mt-2 text-lg text-muted-foreground max-w-2xl'>
+            <p className='mt-2 max-w-2xl text-lg text-muted-foreground'>
               Choose from our selection of professional exams to test and
               certify your skills.
             </p>
@@ -143,13 +168,13 @@ export default function AvailableExams() {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <Card
-                  className={`h-full flex flex-col bg-gradient-to-br ${getGradientColor(
+                  className={`flex h-full flex-col bg-gradient-to-br ${getGradientColor(
                     index
-                  )} hover:shadow-lg transition-all duration-300 border border-secondary`}
+                  )} border border-secondary transition-all duration-300 hover:shadow-lg`}
                 >
                   <CardHeader>
                     <div className='flex justify-between'>
-                      <CardTitle className='text-xl mb-2'>
+                      <CardTitle className='mb-2 text-xl'>
                         {exam.title}
                       </CardTitle>
                       <div className='flex gap-2'>
@@ -171,29 +196,37 @@ export default function AvailableExams() {
                     <CardDescription>{exam.description}</CardDescription>
                   </CardHeader>
                   <CardContent className='flex-grow'>
-                    <div className='flex items-center mb-4 text-muted-foreground'>
+                    <div className='mb-4 flex items-center text-muted-foreground'>
                       <Clock className='mr-2 h-4 w-4' />
                       <span>{exam.duration} minutes</span>
                     </div>
-                    <div className='flex items-center mb-4 text-muted-foreground'>
+                    <div className='mb-4 flex items-center text-muted-foreground'>
                       <FileQuestion className='mr-2 h-4 w-4' />
                       <span>{exam.numQuestions} Questions</span>
                     </div>
-                    <div className='flex items-center text-foreground font-semibold'>
+                    <div className='flex items-center font-semibold text-foreground'>
                       <CreditCard className='mr-2 h-4 w-4' />
                       <span>INR {exam.price}</span>
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button asChild className='w-full'>
-                      <Link href={`/take/${exam.id}`}>Take Test</Link>
+                    <Button
+                      className='w-full'
+                      disabled={isLoading}
+                      onClick={handleTakeTestClick(exam.id, exam.price)}
+                    >
+                      {isLoading ? (
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                      ) : (
+                        'Pay & Take Test'
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
               </motion.div>
             ))
           ) : (
-            <div className='flex flex-col h-96 justify-center items-center'>
+            <div className='flex h-96 flex-col items-center justify-center'>
               <Loader />
               Loading Exams...
             </div>

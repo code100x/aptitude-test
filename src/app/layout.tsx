@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import NextTopLoader from 'nextjs-toploader'
+import { Toaster } from 'sonner'
+
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ScrollToTopButton } from '@/components/global/scroll-to-top-button'
-import { Toaster } from 'sonner'
-import NextTopLoader from 'nextjs-toploader'
+
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
