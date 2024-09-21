@@ -1,5 +1,3 @@
-// components/AvailableExams.tsx
-
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -10,7 +8,7 @@ import { useRazorpay } from '@/hooks/use-razorpay'
 import {
   Clock,
   CreditCard,
-   Loader2,
+  Loader2,
   FilePlus2,
   FileQuestion,
   Pencil,
@@ -76,7 +74,7 @@ export default function AvailableExams({ user }: { user: User }) {
   const fetchExams = async () => {
     try {
       const response = await getExams()
-      console.log("Response=> ", response);
+      console.log('Response=> ', response)
       if (response.success && response.data) {
         setExams(response.data)
       } else {
@@ -136,7 +134,7 @@ export default function AvailableExams({ user }: { user: User }) {
   return (
     <div className='min-h-screen w-full'>
       <div className='mx-auto px-4 py-12'>
-        <div className='mb-12 md:mr-16 flex justify-start md:justify-between'>
+        <div className='mb-12 flex justify-start md:mr-16 md:justify-between'>
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

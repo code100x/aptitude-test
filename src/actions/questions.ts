@@ -8,9 +8,15 @@ import {
   updateQuestionsSchema,
   updateQuestionsValues,
 } from '@/schemas'
+import { validateRequest } from '@/auth'
 
 export const createQuestions = async (values: createQuestionsValues) => {
   try {
+    const session = await validateRequest()
+
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
     const validatedData = createQuestionsSchema.safeParse(values)
     if (!validatedData.success) {
       return { error: validatedData.error.errors[0].message }
@@ -39,6 +45,11 @@ export const createQuestions = async (values: createQuestionsValues) => {
 
 export const getAllQuestions = async () => {
   try {
+    const session = await validateRequest()
+
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
     const questions = await db.question.findMany({
       select: {
         id: true,
@@ -62,6 +73,12 @@ export const updateQuestions = async (
   questions: updateQuestionsValues['questions']
 ) => {
   try {
+    const session = await validateRequest()
+
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
+
     const validatedData = updateQuestionsSchema.safeParse({ questions })
     if (!validatedData.success) {
       return { error: validatedData.error.errors[0].message }
@@ -72,7 +89,6 @@ export const updateQuestions = async (
     const updateResults = await Promise.all(
       validQuestions.map(async (question) => {
         try {
-
           const updatedQuestion = await db.question.update({
             where: { id: question.id },
             data: {
@@ -108,6 +124,11 @@ export const updateQuestions = async (
 
 export const deleteQuestion = async (id: string) => {
   try {
+    const session = await validateRequest()
+
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
     await db.question.delete({
       where: { id },
     })

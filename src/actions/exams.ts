@@ -32,6 +32,12 @@ interface SubmitExamParams {
 
 export const createExam = cache(async (examData: CreateExamInput) => {
   try {
+    const session = await validateRequest()
+
+    if (!session || !session.user) {
+      throw new Error('Unauthorized')
+    }
+
     const createdExam = await db.exam.create({
       data: examData,
     })
@@ -54,6 +60,12 @@ export const createExam = cache(async (examData: CreateExamInput) => {
 
 export const updateExam = cache(async (examData: UpdateExamInput) => {
   try {
+     const session = await validateRequest()
+
+     if (!session || !session.user) {
+       throw new Error('Unauthorized')
+     }
+
     const { id, ...updateFields } = examData
 
     const totalAvailableQuestions = await db.question.findMany()
@@ -74,13 +86,19 @@ export const updateExam = cache(async (examData: UpdateExamInput) => {
 
     return { success: true, data: updatedExam }
   } catch (error) {
-    console.error('Error updating exam:', error) // Add more detailed error logging for debugging
+    console.error('Error updating exam:', error)
     throw new Error('Failed to update exam')
   }
 })
 
 export const getExams = async () => {
   try {
+     const session = await validateRequest()
+
+     if (!session || !session.user) {
+       throw new Error('Unauthorized')
+     } 
+     
     const response = await db.exam.findMany({
       select: {
         id: true,
@@ -104,6 +122,12 @@ export const getExams = async () => {
 
 export const deleteExam = cache(async (examId: string) => {
   try {
+     const session = await validateRequest()
+
+     if (!session || !session.user) {
+       throw new Error('Unauthorized')
+     }
+
     await db.exam.update({
       where: { id: examId },
       data: {
@@ -121,6 +145,12 @@ export const deleteExam = cache(async (examId: string) => {
 // Get Random Questions for an Exam
 export const getRandomQuestionsForExam = async (examId: string) => {
   try {
+     const session = await validateRequest()
+
+     if (!session || !session.user) {
+       throw new Error('Unauthorized')
+     } 
+
     const exam = await db.exam.findUnique({
       where: { id: examId },
       select: { numQuestions: true },
@@ -156,6 +186,12 @@ export const getRandomQuestionsForExam = async (examId: string) => {
 // Get Exam Data - Fetch exam details and random questions
 export async function getExamData(examId: string) {
   try {
+     const session = await validateRequest()
+
+     if (!session || !session.user) {
+       throw new Error('Unauthorized')
+     }
+     
     const exam = await db.exam.findUnique({
       where: { id: examId },
       select: {
