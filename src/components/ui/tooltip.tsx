@@ -78,4 +78,52 @@ const TooltipContent = React.forwardRef<
 })
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+interface CustomTooltipProps {
+  trigger: React.ReactNode
+  content: React.ReactNode
+  side?: 'top' | 'right' | 'bottom' | 'left'
+  sideOffset?: number
+  className?: string
+  open?: boolean
+  defaultOpen?: boolean
+  delayDuration?: number
+  disableHoverableContent?: boolean
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({
+  trigger,
+  content,
+  side = 'top',
+  sideOffset = 4,
+  className = '',
+  open,
+  defaultOpen,
+  delayDuration,
+  disableHoverableContent,
+}) => {
+  return (
+    <TooltipProvider
+      delayDuration={delayDuration}
+      disableHoverableContent={disableHoverableContent}
+    >
+      <Tooltip open={open} defaultOpen={defaultOpen}>
+        <TooltipTrigger asChild>{trigger}</TooltipTrigger>
+        <TooltipContent
+          side={side}
+          sideOffset={sideOffset}
+          className={className}
+        >
+          {content}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  CustomTooltip,
+}

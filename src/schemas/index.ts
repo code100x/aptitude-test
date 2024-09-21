@@ -166,3 +166,41 @@ export const updateUserDetailsSchema = z.object({
 })
 
 export type UpdateUserDetailsValues = z.infer<typeof updateUserDetailsSchema>
+
+export const createQuestionsSchema = z.object({
+  questions: z.array(
+    z.object({
+      text: z.string().min(1, 'Question text is required'),
+      options: z.array(z.string().min(1, 'Option text is required')),
+      correctAnswer: z.number().min(0, 'Please select a correct answer'),
+      image: z.any().optional(),
+    })
+  ),
+})
+
+export type createQuestionsValues = z.infer<typeof createQuestionsSchema>
+
+export const updateQuestionsSchema = z.object({
+  questions: z.array(
+    z.object({
+      id: z.string(),
+      text: z.string().min(1, 'Question text is required'),
+      options: z.array(z.string().min(1, 'Option text is required')),
+      correctAnswer: z.number().min(0, 'Please select a correct answer'),
+      image: z.any().optional(),
+    })
+  ),
+})
+
+export type updateQuestionsValues = z.infer<typeof updateQuestionsSchema>
+
+export const createExamSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  duration: z.number().min(1, 'Duration must be at least 1 minute'),
+  price: z.number().min(0, 'Price must be a non-negative number'),
+  numQuestions: z.number().min(1, 'Number of questions must be at least 1'),
+})
+
+export type CreateExamValues = z.infer<typeof createExamSchema>

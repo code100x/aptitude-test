@@ -27,11 +27,12 @@ import { Clock, AlertTriangle, Maximize } from 'lucide-react'
 import { toast } from 'sonner'
 import { submitExam } from '@/actions/exams'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import Image from 'next/image'
 interface Question {
   id: string
   text: string
   options: string[]
+  image?: string
 }
 
 interface ExamComponentProps {
@@ -135,19 +136,20 @@ export default function ExamComponent({
     try {
       onExitFullscreen()
       const timeSpent = duration * 60 - timeRemaining
-
+      const examQuestions = questions.map((q) => q.id)
       const result = await submitExam({
         examId,
         answers,
         timeSpent,
         warningCount,
+        questions: examQuestions,
       })
 
       toast.success('Exam Submitted', {
         description: `Your exam has been successfully submitted. Your score: ${result.score}/${questions.length}`,
       })
 
-      router.push(`/exam-results/${result.id}`)
+      router.push(`/exam-results/${examId}`)
     } catch (error) {
       console.error('Error submitting exam:', error)
       toast.error('Error', {
@@ -163,6 +165,7 @@ export default function ExamComponent({
     questions.length,
     router,
     warningCount,
+    questions,
   ])
 
   const formatTime = useCallback((seconds: number) => {
@@ -202,14 +205,23 @@ export default function ExamComponent({
             </CardTitle>
           </CardHeader>
           <CardContent className='flex-1 overflow-y-auto p-6'>
-            <motion.p
+            <motion.div
               key={currentQuestion}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className='mb-6 text-lg'
             >
               {questions[currentQuestion].text}
-            </motion.p>
+
+              {questions[currentQuestion].image && (
+                <Image
+                  alt='question-image'
+                  src={questions[currentQuestion].image}
+                  height={300}
+                  width={300}
+                />
+              )}
+            </motion.div>
             <RadioGroup
               value={answers[questions[currentQuestion].id]?.toString() || ''}
               onValueChange={(value) => handleAnswer(parseInt(value))}

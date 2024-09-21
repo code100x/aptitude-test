@@ -24,7 +24,7 @@ export const Menu = ({ isOpen }: MenuProps) => {
   const menuList = getMenuList(pathname)
 
   return (
-    <nav className='mt-8 h-full w-full overflow-scroll overflow-x-hidden sidebar z-[30]'>
+    <nav className='mt-8 h-full w-full overflow-scroll overflow-x-hidden sidebar z-3'>
       <ul className='flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2'>
         {menuList.map(({ groupLabel, menus }, index) => (
           <li className={cn('w-full space-y-4', groupLabel ? 'pt-5' : '')} key={index}>

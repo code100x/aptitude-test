@@ -10,75 +10,90 @@ import {
 } from '@/components/ui/card'
 import { motion } from 'framer-motion'
 
+interface ExamData {
+  id: string
+  title: string
+  description: string
+  price: number
+  duration: number
+  numQuestions: number
+}
+
 interface ExamInstructionsProps {
-  examId: string
-  examTitle: string
-  examDescription: string
-  examPrice: number
-  examDuration: number
+  examData: ExamData
   onStart: () => void
   onCancel: () => void
 }
 
 export default function ExamInstructions({
-  examId,
-  examTitle,
-  examDescription,
-  examPrice,
-  examDuration,
+  examData,
   onStart,
   onCancel,
 }: ExamInstructionsProps) {
   const [agreed, setAgreed] = useState(false)
-
+  const { id, title, description, price, duration, numQuestions } = examData
   return (
     <motion.div
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
+      className='flex justify-center items-center min-h-screen'
     >
-      <Card className='mt-12 w-full mx-auto'>
-        <CardHeader>
-          <CardTitle>{examTitle} - Instructions</CardTitle>
+      <Card className='w-full  mx-4 md:mx-0'>
+        <CardHeader className='bg-primary text-white rounded-t-md'>
+          <CardTitle className='text-lg font-semibold'>{title}</CardTitle>
+          <p className='text-sm'>{description}</p>
         </CardHeader>
         <CardContent>
-          <p className='mb-4'>{examDescription}</p>
-          <p className='mb-4'>Price: INR {examPrice}</p>
-          <p className='mb-4'>Duration: {examDuration} minutes</p>
-          <ul className='list-disc pl-5 space-y-2'>
-            <li>This exam must be taken in full-screen mode.</li>
-            <li>
-              You will be prompted to enter full-screen mode before the exam
-              starts.
-            </li>
-            <li>
-              If you exit full-screen mode during the exam, you will be prompted
-              to return to full-screen.
-            </li>
-            <li>
-              Failure to return to full-screen mode will result in automatic
-              submission of your exam.
-            </li>
-            <li>
-              Changing tabs or windows during the exam will result in automatic
-              submission.
-            </li>
-            <li>
-              Ensure you have a stable internet connection before starting the
-              exam.
-            </li>
-            <li>
-              Once you start the exam, the timer will begin and cannot be
-              paused.
-            </li>
-          </ul>
-          <div className='flex items-center space-x-2 mt-4'>
+          <div className='my-6 p-4 border rounded-md border-gray-200'>
+            <p className='mb-1'>
+              <strong>Price:</strong> INR {price}
+            </p>
+            <p>
+              <strong>Duration:</strong> {duration} minutes
+            </p>
+            <p>
+              <strong>Questions:</strong> {numQuestions}
+            </p>
+          </div>
+          <div className='mb-6 p-4 border rounded-md border-gray-200'>
+            <p className='font-medium mb-2'>Instructions</p>
+            <ul className='list-disc pl-5 space-y-2 text-gray-600'>
+              <li>This exam must be taken in full-screen mode.</li>
+              <li>
+                You will be prompted to enter full-screen mode before the exam
+                starts.
+              </li>
+              <li>
+                If you exit full-screen mode during the exam, you will be
+                prompted to return to full-screen.
+              </li>
+              <li>
+                Failure to return to full-screen mode will result in automatic
+                submission of your exam.
+              </li>
+              <li>
+                Changing tabs or windows during the exam will result in
+                automatic submission.
+              </li>
+              <li>
+                Ensure you have a stable internet connection before starting the
+                exam.
+              </li>
+              <li>
+                Once you start the exam, the timer will begin and cannot be
+                paused.
+              </li>
+            </ul>
+          </div>
+          <div className='flex items-center space-x-2 '>
             <Checkbox
               id='agree'
               checked={agreed}
               onCheckedChange={(checked) => setAgreed(checked as boolean)}
+              className='h-5 w-5'
             />
-            <label htmlFor='agree'>
+            <label htmlFor='agree' className='text-gray-700'>
               I have read and agree to the exam instructions and conditions.
             </label>
           </div>

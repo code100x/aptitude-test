@@ -19,7 +19,7 @@ export const InfoBar = async ({ className }: InfoBarProps) => {
   return (
     <NavbarWrapper
       className={cn(
-        'fixed z-[10] left-0 right-0 top-0 p-4 bg-background/80 backdrop-blur-md flex  gap-4 items-center',
+        'fixed left-0 right-0 top-0 p-4 bg-background/80 backdrop-blur-md flex  gap-4 items-center',
         className
       )}
     >
@@ -35,7 +35,7 @@ export const InfoBar = async ({ className }: InfoBarProps) => {
           )}
         >
           <Image
-            src='https://d2szwvl7yo497w.cloudfront.net/courseThumbnails/main.png'
+            src='/logo.png'
             alt='logo'
             width={40}
             height={40}

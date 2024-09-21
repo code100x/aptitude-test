@@ -15,8 +15,8 @@ export const UserButton = async ({ user }: { user: User }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger aria-label='user profile trigger'>
-        <Avatar aria-label='user avatar'>
-          <AvatarImage alt='user-button' src={user.imageUrl ?? ''} />
+        <Avatar aria-label='user avatar' className='h-8 w-8'>
+          <AvatarImage alt='user-button' src={user.imageUrl ?? 'profile.png'} />
           <AvatarFallback className='bg-primary'>
             <User2 className='text-white dark:text-black' />
           </AvatarFallback>
