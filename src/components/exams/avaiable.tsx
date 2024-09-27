@@ -36,7 +36,7 @@ export default function AvailableExams({
   const router = useRouter()
   const processPayment = useRazorpay()
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [loadingExamId, setLoadingExamId] = useState<string | null>(null)
 
   useEffect(() => {
     controls.start((i) => ({
@@ -61,14 +61,14 @@ export default function AvailableExams({
   }
 
   const handleTakeTestClick = (examId: string, amount: number) => async () => {
-    setIsLoading(true)
+    setLoadingExamId(examId)
     await processPayment({
       amount,
       examId,
       successCallback: () => handlePaymentSuccess(examId),
       user,
     })
-    setIsLoading(false)
+    setLoadingExamId(null)
   }
 
   return (
@@ -121,10 +121,10 @@ export default function AvailableExams({
                 <CardFooter>
                   <Button
                     className='w-full'
-                    disabled={isLoading}
+                    disabled={loadingExamId === exam.id}
                     onClick={handleTakeTestClick(exam.id, exam.price)}
                   >
-                    {isLoading ? (
+                    {loadingExamId === exam.id ? (
                       <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                     ) : (
                       'Pay & Take Test'
